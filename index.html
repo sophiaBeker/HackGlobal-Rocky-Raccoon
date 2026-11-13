@@ -12,6 +12,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/lesson-experience.css">
 </head>
 
 <body>
@@ -34,7 +35,7 @@
   </div>
 
   <div class="side-spacer"></div>
-  <div class="side-note">🌱 Little steps make you safety-smart!<br><strong id="sidePoints">0 quest points</strong></div>
+  <div class="side-note">Little steps make you safety-smart!<br><strong id="sidePoints">0 quest points</strong></div>
 
   <div class="profile">
     <div class="avatar">🌻</div>
@@ -49,13 +50,13 @@
   <div class="topbar">
     <div class="crumb"><strong>Safety Quest</strong> / <span id="crumbPage">Home</span></div>
     <div class="top-actions">
-      <span class="pill">⭐ <span id="pointsTop">0</span> points</span>
+      <span class="pill"><span id="pointsTop">0</span> points</span>
       <button id="topAuth" class="secondary" onclick="showPage('account')">Log in</button>
     </div>
   </div>
 
   <section id="page-home" class="page active">
-    <h1 class="hello">Hey, Explorer! 👋</h1>
+    <h1 class="hello">Hey, Explorer!</h1>
     <p class="sub">Ready to get a little more prepared today? Rocky is here to help you learn, practice, and feel confident.</p>
 
     <div class="hero">
@@ -102,7 +103,7 @@
         <h3>A note from Rocky</h3>
         <p class="desc">Your friendly safety guide</p>
         <div class="chat-preview">
-          <div class="rocky-mini">🦝</div>
+          <div class="rocky-mini"></div>
           <div class="bubble">“It's okay to have questions! Learning what to do ahead of time can help you feel prepared.”</div>
         </div>
         <button class="secondary" style="margin-top:12px" onclick="showPage('rocky')">Talk to Rocky →</button>
@@ -111,9 +112,9 @@
   </section>
 
   <section id="page-explore" class="page">
-    <h1 class="hello">Explore lessons ✨</h1>
+    <h1 class="hello">Explore lessons</h1>
     <p class="sub">Choose a quest and practice one skill at a time. Ask a trusted grown-up if you need help.</p>
-    <input id="moduleSearch" class="searchbar" type="search" placeholder="🔎 Search earthquakes, fire safety, drills..." aria-label="Search lessons">
+    <input id="moduleSearch" class="searchbar" type="search" placeholder="Search earthquakes, fire safety, drills..." aria-label="Search lessons">
     <div class="module-grid" id="allModules"></div>
     <p id="noResults" class="sub" style="display:none">No lessons match that search.</p>
   </section>
@@ -127,7 +128,7 @@
 
   <section id="page-rocky" class="page">
     <div class="chat-page">
-      <h1 class="hello">Ask Rocky 🦝</h1>
+      <h1 class="hello">Ask Rocky</h1>
       <p class="sub">Ask questions, follow up, and learn with your friendly safety guide.</p>
 
       <div class="panel" style="margin-top:20px">
@@ -155,26 +156,29 @@
   </section>
 
   <section id="page-account" class="page">
-    <h1 class="hello">Your account 🌱</h1>
+    <h1 class="hello">Your account </h1>
     <p class="sub">Save your learning progress by creating an account, or keep exploring as a guest.</p>
     <div id="accountContent" class="form-card"></div>
   </section>
 
   <footer>
     <span>© Safety Quest · Team Rocky Raccoon</span>
-    <span>Learn bravely. Practice safely. 🌱</span>
+    <span>Learn bravely. Practice safely. </span>
   </footer>
 </main>
 </div>
 
-<!-- Load project configuration before the application. -->
+<!-- Configuration -->
 <script src="config.js"></script>
 
-<!-- Main application and supporting scripts. -->
+<!-- Core application and lesson content -->
 <script src="js/app.js"></script>
 <script src="js/scripted-lessons.js"></script>
+<script src="js/lessons-v2.js"></script>
+
+<!-- UI enhancements and the single active lesson engine -->
 <script src="js/enhancements.js"></script>
-<script src="js/rocky-why.js"></script>
+<script src="js/lesson-experience.js"></script>
 
 </body>
 </html>
