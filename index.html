@@ -13,6 +13,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="css/lesson-experience.css">
+<link rel="stylesheet" href="css/flashcards.css">
 </head>
 
 <body>
@@ -29,6 +30,7 @@
     <nav class="nav">
       <button class="active" data-page="home">⌂ <span class="nav-text">Home</span></button>
       <button data-page="explore">✦ <span class="nav-text">Lessons</span></button>
+      <button data-page="flashcards">🗂️ <span class="nav-text">Flashcards</span></button>
       <button data-page="rocky">💬 <span class="nav-text">Ask Rocky</span></button>
       <button data-page="account">👤 <span class="nav-text">Account</span></button>
     </nav>
@@ -119,6 +121,41 @@
     <p id="noResults" class="sub" style="display:none">No lessons match that search.</p>
   </section>
 
+  <section id="page-flashcards" class="page">
+    <div class="flashcards-page">
+      <h1 class="hello">Study with flashcards</h1>
+      <p class="sub">Practice the important ideas from every Safety Quest module. Flip a card to check your answer, then mark whether you know it.</p>
+      <div class="flashcard-toolbar">
+        <label for="flashcardTopic">Study topic</label>
+        <select id="flashcardTopic" aria-label="Choose a flashcard topic">
+          <option value="all">All modules</option>
+          <option value="earthquake">Earthquake Ready</option>
+          <option value="fire">Fire Safety Basics</option>
+          <option value="drill">Practice Makes Ready</option>
+          <option value="shelter">Shelter Together</option>
+          <option value="kit">Emergency Kit Quest</option>
+          <option value="help">How to Get Help</option>
+        </select>
+        <button class="secondary" id="shuffleFlashcards" type="button">🔀 Shuffle</button>
+      </div>
+      <div class="flashcard-progress"><span id="flashcardCount">Card 1 of 18</span><span id="flashcardKnown">0 known</span></div>
+      <div class="flashcard-progress-track"><span id="flashcardProgressFill"></span></div>
+      <button class="flashcard" id="flashcard" type="button" aria-label="Flip flashcard" aria-pressed="false">
+        <span class="flashcard-topic" id="flashcardTopicLabel">EARTHQUAKE READY</span>
+        <span class="flashcard-prompt" id="flashcardPrompt">What should you do when an earthquake starts indoors?</span>
+        <span class="flashcard-hint" id="flashcardHint">Tap the card to reveal the answer</span>
+        <span class="flashcard-answer" id="flashcardAnswer" hidden></span>
+      </button>
+      <div class="flashcard-actions">
+        <button class="secondary" id="flashcardPrevious" type="button">← Previous</button>
+        <button class="secondary" id="flashcardReview" type="button">↻ Review again</button>
+        <button class="btn" id="flashcardKnownButton" type="button">✓ I know this</button>
+        <button class="secondary" id="flashcardNext" type="button">Next →</button>
+      </div>
+      <p class="flashcard-note">These cards are for extra practice. They do not affect lesson completion or quiz scores.</p>
+    </div>
+  </section>
+
   <section id="page-lesson" class="page">
     <div style="max-width:850px;margin:auto">
       <button class="link-btn" onclick="showPage('explore')" style="margin-bottom:15px">← Back to lessons</button>
@@ -181,6 +218,7 @@
 <script src="js/emergency-numbers.js"></script>
 <script src="js/lesson-experience.js"></script>
 <script src="js/rocky-why.js"></script>
+<script src="js/flashcards.js"></script>
 
 </body>
 </html>
