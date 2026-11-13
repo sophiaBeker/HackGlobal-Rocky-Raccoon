@@ -71,7 +71,7 @@ function renderAuthForm(){
   ${isSignup?`<div class="field"><label for="displayName">Your Explorer nickname</label><input id="displayName" autocomplete="nickname" maxlength="20" placeholder="e.g. StarryFox" aria-describedby="nicknameHelp"><small id="nicknameHelp">Choose a fun nickname—not your real name, birthday, school, or other personal details.</small></div>`:''}
   <div class="field"><label for="authEmail">Parent or guardian email</label><input id="authEmail" type="email" autocomplete="email" placeholder="grownup@example.com" required></div>
   <div class="field"><label for="authPassword">${isSignup?'Create a password with your grown-up':'Password'}</label><input id="authPassword" type="password" autocomplete="${isSignup?'new-password':'current-password'}" minlength="8" placeholder="At least 8 characters" required></div>
-  ${isSignup?`<label class="consent-check"><input id="guardianAcknowledgement" type="checkbox"> I am the parent or legal guardian, and I am helping create this account and agree to the site's privacy information.</label>`:''}
+  ${isSignup?`<label class="consent-check"><input id="guardianAcknowledgement" type="checkbox"> I am the parent or legal guardian, and I am completing this signup with the child.</label>`:''}
   <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="authSubmit" type="button" onclick="authAction('${isSignup?'signup':'login'}')">${isSignup?'Create account':'Log in'}</button><button class="secondary" type="button" onclick="switchAuthMode()">${isSignup?'Already have an account? Log in':'Need an account? Sign up'}</button></div>
   <p class="form-switch">You can keep using <button class="link-btn" onclick="showPage('home')">guest mode</button> without signing up.</p>
  </div>`;
