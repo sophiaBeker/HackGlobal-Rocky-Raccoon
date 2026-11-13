@@ -3,6 +3,4 @@ node_modules/
 .env.*
 !.env.example
 config/.env
-config/config.js
-config.js
 .DS_Store
