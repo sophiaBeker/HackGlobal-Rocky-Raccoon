@@ -1,0 +1,19 @@
+/* Standalone flashcard study page */
+.flashcards-page{max-width:850px;margin:0 auto}
+.flashcard-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:22px 0 16px}
+.flashcard-toolbar label{font-size:12px;font-weight:800;color:var(--muted)}
+.flashcard-toolbar select{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:white;color:var(--ink);font:700 12px 'DM Sans',sans-serif;min-width:190px}
+.flashcard-progress{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:12px;font-weight:800;margin-bottom:8px}
+.flashcard-progress-track{height:7px;border-radius:20px;background:#e9ede5;overflow:hidden;margin-bottom:16px}
+.flashcard-progress-track span{display:block;height:100%;width:0;background:#79aa65;transition:width .2s}
+.flashcard{width:100%;min-height:300px;border:2px solid #dce8d5;border-radius:22px;background:linear-gradient(145deg,#fff 0%,#f1f6ed 100%);padding:32px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;text-align:center;color:var(--ink);box-shadow:0 10px 28px rgba(32,59,54,.08);cursor:pointer;transition:transform .18s,border-color .18s}
+.flashcard:hover{transform:translateY(-2px);border-color:#9fbd91}
+.flashcard-topic{font-size:10px;letter-spacing:1.2px;font-weight:900;color:var(--green);background:#e5f0df;border-radius:30px;padding:7px 12px}
+.flashcard-prompt{font:900 clamp(20px,3vw,28px) Nunito;max-width:620px;line-height:1.35}
+.flashcard-hint{font-size:12px;color:var(--muted)}
+.flashcard-answer{font-size:16px;line-height:1.6;max-width:620px;color:#40584f;background:white;border:1px solid var(--line);border-radius:14px;padding:16px 20px}
+.flashcard.is-flipped{background:linear-gradient(145deg,#f2f7ed 0%,#e5f0df 100%)}
+.flashcard-actions{display:flex;justify-content:center;align-items:center;gap:9px;flex-wrap:wrap;margin-top:17px}
+.flashcard-actions button:disabled{opacity:.4;cursor:not-allowed}
+.flashcard-note{text-align:center;color:var(--muted);font-size:11px;margin-top:16px}
+@media(max-width:680px){.flashcard{min-height:260px;padding:23px 17px}.flashcard-toolbar{align-items:stretch}.flashcard-toolbar select{flex:1;min-width:0}.flashcard-actions{display:grid;grid-template-columns:1fr 1fr}.flashcard-actions button{justify-content:center}}
