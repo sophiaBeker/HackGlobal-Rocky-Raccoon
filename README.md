@@ -53,9 +53,12 @@ Safety Quest supports both guest learners and registered users.
 
 - Guest users can access the Earthquake Ready learning module without creating an account.
 - Registered users can access additional learning modules.
-- Account creation, login, and logout functionality.
+- Guardian-managed account creation, login, and logout through Supabase Auth.
+- A learner chooses a nickname; the parent or guardian email is used for authentication and confirmation.
+- The learner's nickname is shown in the interface instead of the guardian email.
 - Saved learning progress for registered users through Supabase.
 - Browser-based progress tracking for guest users.
+- Signup prompts the parent or guardian to participate and acknowledge the privacy information.
 
 ## Technology Stack
 
@@ -69,6 +72,12 @@ Some integrations require API credentials and environment configuration before t
 ## Safety and Educational Responsibility
 
 Safety Quest is intended to supplement, not replace, guidance from teachers, parents, and emergency management professionals.
+
+### Child account privacy (prototype)
+
+The account flow is designed so a learner uses a nickname and a parent or guardian's email address, rather than asking the learner for their own email or real name. The current prototype stores the guardian email as the Supabase Auth login address and stores the nickname in the user's profile metadata. Learning progress is associated with the authenticated account.
+
+The signup checkbox and email confirmation are prototype safeguards; they do **not by themselves establish legally sufficient verifiable parental consent** or make the product compliant with COPPA, GDPR-K, or other child privacy laws. Before public use with children, the team must implement and review an appropriate parental notice and consent process, a clear privacy policy, data retention/deletion procedures, and any required age/region-specific controls. Do not collect children's personal information until those safeguards have been reviewed and approved. The Supabase project must also have email confirmation enabled and its database security policies configured.
 
 Educational content should be grounded in reliable emergency preparedness resources. AI-generated responses are designed to support learning rather than independently determine emergency procedures.
 
