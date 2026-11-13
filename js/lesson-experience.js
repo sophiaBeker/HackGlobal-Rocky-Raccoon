@@ -140,6 +140,42 @@
         <div class="step-indicator">${progressDots(count, current - 1, current - 1)}</div>`;
     }
   
+    function renderEmergencyDirectory() {
+      const entries = window.SAFETY_QUEST_EMERGENCY_NUMBERS || [];
+      const options = entries.map((entry, index) =>
+        `<option value="${index}">${escapeHTML(entry.country)}</option>`
+      ).join("");
+      return `
+        <section class="notice sq-emergency-directory" aria-labelledby="sqEmergencyDirectoryTitle">
+          <strong id="sqEmergencyDirectoryTitle">🌍 Explore emergency numbers by country</strong>
+          <p>Choose a country to see example emergency contact numbers. Ask a trusted grown-up to confirm the local number.</p>
+          <label for="sqEmergencyCountry">Choose a country or region</label>
+          <select id="sqEmergencyCountry">
+            <option value="">Choose a location…</option>
+            ${options}
+          </select>
+          <div id="sqEmergencyNumber" class="sq-emergency-result" role="status" aria-live="polite">
+            Your country's emergency number will appear here.
+          </div>
+          <small>This is a starter directory, not a complete list. Numbers and coverage can vary by area and service.</small>
+        </section>`;
+    }
+
+    function bindEmergencyDirectory(content) {
+      const select = content.querySelector("#sqEmergencyCountry");
+      const result = content.querySelector("#sqEmergencyNumber");
+      if (!select || !result) return;
+      select.addEventListener("change", () => {
+        const entries = window.SAFETY_QUEST_EMERGENCY_NUMBERS || [];
+        const entry = entries[Number(select.value)];
+        if (!entry || select.value === "") {
+          result.textContent = "Your country's emergency number will appear here.";
+          return;
+        }
+        result.innerHTML = `<strong>${escapeHTML(entry.numbers)}</strong><p>${escapeHTML(entry.note)}</p>`;
+      });
+    }
+
     function renderReading() {
       const data = lesson();
       if (!data) return;
@@ -162,6 +198,7 @@
           <h3>${escapeHTML(section.title)}</h3>
           ${sectionText(section.body)}
           ${section.callout ? `<div class="callout">${escapeHTML(section.callout)}</div>` : ""}
+          ${section.emergencyDirectory ? renderEmergencyDirectory() : ""}
           ${section.example ? `<div class="sq-example"><strong>🦝 Rocky's example</strong><p>${escapeHTML(section.example)}</p></div>` : ""}
           <div class="sq-reading-footer">
             <span>Take your time. You can go back and read this again.</span>
@@ -175,6 +212,7 @@
           </div>
         </article>`;
   
+      if (section.emergencyDirectory) bindEmergencyDirectory(content);
       document.getElementById("sqExit").addEventListener("click", () => showPage("explore"));
       document.getElementById("sqPrevious").addEventListener("click", () => {
         if (readingIndex > 0) readingIndex--;
