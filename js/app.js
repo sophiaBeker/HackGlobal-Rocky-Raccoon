@@ -1,6 +1,6 @@
 /* Configure these public Supabase project values in config.js. Never put a service-role key here. */
 const CONFIG = window.SAFETY_QUEST_CONFIG || {};
-const supabaseReady = !!(CONFIG.supabaseUrl && CONFIG.supabaseAnonKey && window.supabase);
+const supabaseReady = !!(CONFIG.supabaseUrl && CONFIG.supabaseAnonKey && window.supabase && !CONFIG.supabaseUrl.includes('SAFETY-QUEST') && !CONFIG.supabaseAnonKey.includes('SAFETY_QUEST_'));
 const supabaseClient = supabaseReady ? window.supabase.createClient(CONFIG.supabaseUrl,CONFIG.supabaseAnonKey) : null;
 const modules=[
 {id:'earthquake',title:'Earthquake Ready',icon:'🌎',tag:'GUEST QUEST',desc:'Learn how to protect yourself when the ground shakes.',time:'3 min'},
