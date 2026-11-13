@@ -7,7 +7,7 @@ const { createClient } = require("@supabase/supabase-js");
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
 app.use(express.json({ limit: "12kb" }));
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname, "..")));
 
 const openai = process.env.OPENAI_API_KEY
   ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
