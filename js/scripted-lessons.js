@@ -20,7 +20,7 @@
           {
             title: "What is an earthquake?",
             body: "An earthquake happens when the ground suddenly shakes or moves. Deep underneath Earth's surface, giant pieces of rock slowly move. Sometimes these pieces push or slide against each other, which can make the ground shake.",
-            callout: "🌎 Earthquakes can be small or strong, but knowing what to do can help us stay safe!",
+            callout: "Earthquakes can be small or strong, but knowing what to do can help us stay safe!",
             q: "What is an earthquake?",
             answers: [
               "A storm with strong wind",
@@ -33,7 +33,7 @@
           {
             title: "What happens during an earthquake?",
             body: "You might notice the ground shaking beneath your feet, furniture moving or wobbling, books or other objects falling, and windows rattling.",
-            callout: "🦝 Don't panic, Safety Rangers! Knowing what to expect can help you remember your safety steps.",
+            callout: "Don't panic, Safety Rangers! Knowing what to expect can help you remember your safety steps.",
             q: "Which might happen during an earthquake?",
             answers: [
               "Windows rattling",
@@ -46,7 +46,7 @@
           {
             title: "Drop, Cover, and Hold On",
             body: "DROP: Get down on your hands and knees. COVER: Protect your head and neck. Get underneath a sturdy desk or table if one is nearby. HOLD ON: Hold onto your shelter until the shaking stops.",
-            callout: "🛡️ Drop, Cover, and Hold On! You’ve got this, Safety Rangers!",
+            callout: "Drop, Cover, and Hold On! You’ve got this, Safety Rangers!",
             q: "What are the three steps to remember during an earthquake?",
             answers: [
               "Run, Jump, and Hide",
@@ -59,7 +59,7 @@
           {
             title: "What NOT to do",
             body: "During an earthquake, don't run outside while the ground is shaking, stand near windows or glass, use elevators, or stand in a doorway for protection. Stay where you are and protect your head and neck.",
-            callout: "💚 Stay low, stay covered, and stay safe!",
+            callout: "Stay low, stay covered, and stay safe!",
             q: "Which action should you avoid during an earthquake?",
             answers: [
               "Protect your head and neck",
@@ -72,7 +72,7 @@
           {
             title: "What if you're outside?",
             body: "If an earthquake happens while you're outside, move away from trees, buildings, and power lines if you can safely do so. Find a clear, open area nearby, drop down, and protect your head and neck until the shaking stops.",
-            callout: "🌳 If you're already outside, stay outside! Find a safe, open space!",
+            callout: "If you're already outside, stay outside! Find a safe, open space!",
             q: "Where should you go if you're outside during an earthquake?",
             answers: [
               "Next to a building",
@@ -85,7 +85,7 @@
           {
             title: "After the shaking stops",
             body: "Listen to your teacher or a trusted adult. Watch out for broken glass and fallen objects. Be ready for aftershocks—smaller earthquakes that happen afterward. Walk carefully to a safe place when instructed.",
-            callout: "🤝 Stay calm, listen carefully, and remember that we're safer when we work together!",
+            callout: "Stay calm, listen carefully, and remember that we're safer when we work together!",
             q: "What should you do after the shaking stops?",
             answers: [
               "Listen to a trusted adult and watch for hazards",
@@ -107,7 +107,7 @@
           {
             title: "What is a fire emergency?",
             body: "Fire can help us cook food and stay warm, but it can also be dangerous when it spreads somewhere it shouldn't. A fire emergency occurs when a fire becomes unsafe and people need to get away from danger.",
-            callout: "🔥 If you see fire or smoke, tell an adult and get to safety right away.",
+            callout: "If you see fire or smoke, tell an adult and get to safety right away.",
             q: "What should you do if you see fire or smoke?",
             answers: [
               "Tell a trusted adult and get to safety",
@@ -120,7 +120,7 @@
           {
             title: "What is a fire alarm?",
             body: "A fire alarm is a warning system that sounds a loud signal to alert everyone to a potential fire. When you hear one, stop what you're doing, listen to your teacher or trusted adult, walk calmly toward the nearest safe exit, and go to your designated meeting spot.",
-            callout: "🚨 When the alarm sounds, it's time to move safely! Never ignore a fire alarm!",
+            callout: "When the alarm sounds, it's time to move safely! Never ignore a fire alarm!",
             q: "When a fire alarm sounds at school, what should you do?",
             answers: [
               "Ignore it if you don't see smoke",
@@ -133,7 +133,7 @@
           {
             title: "Fire extinguishers",
             body: "A fire extinguisher is a special safety tool that can put out certain small fires. You might see one hanging on a wall at school or in a building. Fire extinguishers are for trained adults to use when it is safe to do so.",
-            callout: "🧯 If you see a fire, don't try to put it out yourself! Get away and tell a trusted adult!",
+            callout: "If you see a fire, don't try to put it out yourself! Get away and tell a trusted adult!",
             q: "Who should use a fire extinguisher?",
             answers: [
               "A child who wants to help",
@@ -146,7 +146,7 @@
           {
             title: "What about your backpack?",
             body: "Imagine you're sitting in class when the fire alarm rings. Leave your backpack and school supplies behind. Follow your teacher to the nearest safe exit. Never go back inside for your belongings. Stay with your class at the meeting spot.",
-            callout: "🎒 Your safety is more important than your stuff! Leave your backpack behind and get outside!",
+            callout: "Your safety is more important than your stuff! Leave your backpack behind and get outside!",
             q: "The fire alarm rings while you're in class. What should you leave behind?",
             answers: [
               "Your backpack and school supplies",
@@ -159,7 +159,7 @@
           {
             title: "How do we escape safely?",
             body: "If there is a fire, stay low if there is smoke, use the stairs rather than an elevator, follow a safe exit route, and stay outside once you've escaped. If smoke or fire blocks your way, use another safe exit. If you cannot escape, close the door, stay away from smoke, and call for help.",
-            callout: "🚪 Get out, stay out, and let the firefighters handle the fire!",
+            callout: "Get out, stay out, and let the firefighters handle the fire!",
             q: "What should you do after escaping a building fire?",
             answers: [
               "Go back for your things",
@@ -181,7 +181,7 @@
           {
             title: "What is a flood?",
             body: "A flood happens when too much water covers land that is usually dry. Floods can occur when there is heavy rain, rivers overflow, or large amounts of water enter an area. Some floods happen slowly, while others happen very quickly.",
-            callout: "💧 Water can be powerful! Let's learn how to stay safe when floods happen!",
+            callout: "Water can be powerful! Let's learn how to stay safe when floods happen!",
             q: "What is a flood?",
             answers: [
               "Water covering land that is usually dry",
@@ -194,7 +194,7 @@
           {
             title: "Why can floods be dangerous?",
             body: "Floodwater can move quickly and knock people down, carry away cars and other objects, hide dangerous electrical wires, and contain dirt, germs, and sharp objects.",
-            callout: "⚠️ Floodwater might look like a giant puddle, but it can be dangerous! Never play in floodwater!",
+            callout: "Floodwater might look like a giant puddle, but it can be dangerous! Never play in floodwater!",
             q: "Why should you stay out of floodwater?",
             answers: [
               "It is always clean",
@@ -207,7 +207,7 @@
           {
             title: "What should you do during a flood?",
             body: "Listen to your teacher or a trusted adult. Move away from flooded areas. Go to higher ground when instructed. Never walk, swim, or play in floodwater.",
-            callout: "🌊 Turn Around, Don't Drown!",
+            callout: "Turn Around, Don't Drown!",
             q: "You see floodwater covering a street. What should you do?",
             answers: [
               "Walk through carefully",
@@ -220,7 +220,7 @@
           {
             title: "What if you're at school?",
             body: "If a flood happens while you're at school, stay with your teacher, listen carefully to emergency instructions, follow your school's safe evacuation plan, and stay away from flooded hallways and outdoor areas.",
-            callout: "🏫 Your teachers have safety plans to help protect you. Stay together and follow their directions!",
+            callout: "Your teachers have safety plans to help protect you. Stay together and follow their directions!",
             q: "What should you do if flooding happens at school?",
             answers: [
               "Leave the class alone",
@@ -233,7 +233,7 @@
           {
             title: "What happens after a flood?",
             body: "Even after the rain stops, some places may still be unsafe. Stay away from leftover floodwater, watch where you step, wait until a trusted adult says an area is safe, and avoid fallen electrical wires.",
-            callout: "💚 Just because the water stops rising doesn't mean it's safe to go back!",
+            callout: "Just because the water stops rising doesn't mean it's safe to go back!",
             q: "When is it safe to return to a flooded area?",
             answers: [
               "As soon as rain stops",
@@ -255,7 +255,7 @@
           {
             title: "What does being prepared mean?",
             body: "Being prepared means getting ready before something unexpected happens. Emergencies can happen at home, at school, or outside. When we have a plan and the right supplies, we can respond more safely.",
-            callout: "🌱 A great Safety Ranger doesn't wait for an emergency to get ready!",
+            callout: "A great Safety Ranger doesn't wait for an emergency to get ready!",
             q: "What does being prepared mean?",
             answers: [
               "Getting ready before something unexpected happens",
@@ -268,7 +268,7 @@
           {
             title: "What is an emergency kit?",
             body: "An emergency kit is a collection of important supplies that can help during an emergency. A kit might include drinking water, food that doesn't spoil quickly, a flashlight, first-aid supplies, extra batteries, and a battery-powered or hand-crank radio.",
-            callout: "🧰 An emergency kit is like a safety toolbox! Every item has an important job!",
+            callout: "An emergency kit is like a safety toolbox! Every item has an important job!",
             q: "Which item belongs in an emergency kit?",
             answers: [
               "A flashlight",
@@ -281,7 +281,7 @@
           {
             title: "What is first aid?",
             body: "First aid is the first help someone receives when they are hurt or sick. A first aid kit might have bandages, disposable gloves, gauze, and cleaning supplies. If someone gets hurt, tell a trusted adult right away.",
-            callout: "🩹 You don't have to be a doctor to help! Getting a trusted adult is an important first step.",
+            callout: "You don't have to be a doctor to help! Getting a trusted adult is an important first step.",
             q: "If someone gets hurt, what should you do first?",
             answers: [
               "Try a medical treatment by yourself",
@@ -294,7 +294,7 @@
           {
             title: "What should you do if someone gets hurt?",
             body: "Stay calm and make sure you are in a safe place. Tell a teacher or trusted adult. Call 911 if there is a serious emergency and an adult is not already getting help. Follow the emergency helper's instructions.",
-            callout: "🤝 Helping doesn't always mean touching someone's injury. Sometimes the best way to help is to get an adult!",
+            callout: "Helping doesn't always mean touching someone's injury. Sometimes the best way to help is to get an adult!",
             q: "What is a safe way to help someone who is hurt?",
             answers: [
               "Make sure you're safe and tell a trusted adult",
@@ -307,7 +307,7 @@
           {
             title: "What is an emergency backpack?",
             body: "An emergency backpack, sometimes called a go-bag, holds supplies you might need if you have to leave home quickly. With a trusted adult, you can help pack water, non-perishable snacks, a flashlight, extra clothes, emergency contact information, and a small comfort item.",
-            callout: "🎒 Pack your emergency backpack with an adult and keep it somewhere easy to find!",
+            callout: "Pack your emergency backpack with an adult and keep it somewhere easy to find!",
             q: "Who should help you prepare an emergency backpack?",
             answers: [
               "A trusted adult",
@@ -329,7 +329,7 @@
           {
             title: "What is 911?",
             body: "911 is a special phone number you can call when someone needs emergency help right away. You can call 911 for a dangerous fire, someone who is seriously hurt, or another dangerous emergency.",
-            callout: "☎️ 911 is for real emergencies, not jokes or games!",
+            callout: "911 is for real emergencies, not jokes or games!",
             q: "When should someone call 911?",
             answers: [
               "To ask about homework",
@@ -342,7 +342,7 @@
           {
             title: "Who are first responders?",
             body: "First responders are trained helpers who respond to emergencies. Firefighters help with fires, rescues, and other emergencies. Paramedics and EMTs give medical help to people who are sick or injured. Police officers help protect people and respond to dangerous situations.",
-            callout: "🚒 First responders are important members of our community who work hard to help keep us safe!",
+            callout: "First responders are important members of our community who work hard to help keep us safe!",
             q: "Which first responder gives emergency medical care?",
             answers: [
               "A firefighter",
@@ -355,7 +355,7 @@
           {
             title: "How do you call 911?",
             body: "If there is a serious emergency, get to a safe place, dial 9-1-1, tell the dispatcher what happened and where you are, listen carefully, answer questions, and stay on the phone until they tell you it's okay to hang up.",
-            callout: "🦝 Stay as calm as you can. The person answering the phone is there to help you!",
+            callout: "Stay as calm as you can. The person answering the phone is there to help you!",
             q: "What should you do when speaking with a 911 dispatcher?",
             answers: [
               "Hang up right away",
@@ -368,7 +368,7 @@
           {
             title: "What should you tell the dispatcher?",
             body: "A dispatcher is the person who answers your emergency call and sends help. They might ask where you are, what happened, whether anyone is hurt, and what phone number you're calling from. It's okay if you don't know every answer. Just tell the truth and do your best.",
-            callout: "💬 You don't have to know everything! Explain what you see and listen carefully!",
+            callout: "You don't have to know everything! Explain what you see and listen carefully!",
             q: "What if you don't know the answer to a dispatcher's question?",
             answers: [
               "Make something up",
@@ -381,7 +381,7 @@
           {
             title: "Rocky's 911 practice",
             body: "Imagine you see someone who has fallen and is not waking up. You are in a safe place and need to call 911. This is only a pretend practice question.",
-            callout: "📣 Never call the real 911 number just to practice!",
+            callout: "Never call the real 911 number just to practice!",
             q: "What should you tell the dispatcher?",
             answers: [
               "“I don't know! Goodbye!”",
@@ -403,7 +403,7 @@
           {
             title: "What is a blackout?",
             body: "A blackout, also called a power outage, happens when electricity stops working in an area. Lights might turn off, televisions might stop working, electronic devices might lose power, and some buildings might become dark.",
-            callout: "🔦 The lights might go out, but don't worry! Let's learn how to stay safe!",
+            callout: "The lights might go out, but don't worry! Let's learn how to stay safe!",
             q: "What is a blackout?",
             answers: [
               "When electricity stops working in an area",
@@ -416,7 +416,7 @@
           {
             title: "Why do blackouts happen?",
             body: "Blackouts can happen for different reasons, including strong storms, trees falling onto power lines, earthquakes, or problems with electrical equipment. Sometimes electricity comes back quickly. Other times, it takes longer.",
-            callout: "🌩️ We can't always stop a blackout, but we can prepare for one!",
+            callout: "We can't always stop a blackout, but we can prepare for one!",
             q: "Which event can cause a blackout?",
             answers: [
               "A tree falling onto power lines",
@@ -429,7 +429,7 @@
           {
             title: "What should you do during a blackout?",
             body: "If the power goes out, stay calm, find a trusted adult, use a flashlight if you need light, stay away from fallen power lines, and avoid touching electrical equipment.",
-            callout: "🔦 Flashlights are our friends during a blackout! Ask an adult for help finding one!",
+            callout: "Flashlights are our friends during a blackout! Ask an adult for help finding one!",
             q: "The power suddenly goes out. What should you do?",
             answers: [
               "Play with candles",
@@ -442,7 +442,7 @@
           {
             title: "What should you NOT do?",
             body: "During a blackout, don't play with candles, matches, or lighters. Don't touch fallen electrical wires, open the refrigerator over and over, or use electrical appliances without adult supervision.",
-            callout: "⚡ Stay away from anything that could cause a fire or electric shock!",
+            callout: "Stay away from anything that could cause a fire or electric shock!",
             q: "Which is NOT a safe blackout activity?",
             answers: [
               "Use a flashlight with an adult's help",
@@ -455,7 +455,7 @@
           {
             title: "How can we prepare?",
             body: "You and your family can prepare by keeping flashlights, extra batteries, drinking water, food that doesn't need cooking, and a battery-powered radio. You can also make a family emergency plan.",
-            callout: "🎒 Being prepared means we know what to do, even when the lights go out!",
+            callout: "Being prepared means we know what to do, even when the lights go out!",
             q: "What is a useful item to prepare for a blackout?",
             answers: [
               "A flashlight and extra batteries",
