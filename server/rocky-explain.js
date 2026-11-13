@@ -1,20 +1,25 @@
 /*
  * "Ask Rocky why" endpoint for Safety Quest.
  *
- * Wire it up in server.js (after the /api/chat route, before app.listen):
- *   require("./rocky-explain")(app, { openai, supabase, rateLimit });
+ * Wired up in server.js:
+ *   require("./rocky-explain")(app, { openai, supabase, rateLimit, lessons, moderate });
  *
  * Design notes:
- *  - NO free-text input from the child. The request only identifies a lesson step and
- *    which wrong answer was picked, so there is no way to type private info or try to
- *    steer the model through this endpoint.
- *  - Rocky is told to explain using ONLY the lesson material in the request.
- *  - Lesson text comes from the client in this prototype (so a tampered client could
- *    change what Rocky is grounded on, affecting only its own session). Before public
- *    release, move lesson content into a server-side file/DB and look it up by
- *    lessonId + sectionIndex instead.
+ *  - NO free-text input from the child. The request only identifies a lesson step
+ *    (lessonId + sectionIndex) and which wrong answer was picked.
+ *  - The lesson text comes from the SERVER's lesson library, never from the request. Any
+ *    lesson text a browser still sends (older rocky-why.js versions do) is ignored, so a
+ *    tampered client cannot change what Rocky is grounded on.
+ *  - Lessons that need an account (everything except the guest lesson) require a valid
+ *    login token here too.
+ *  - Rocky's reply is checked with the moderation endpoint before it is returned. If it is
+ *    flagged or the check fails, the endpoint answers 502 and the frontend falls back to
+ *    its prepared explanation.
+ *  - `store: false` asks OpenAI not to retain the response object.
  */
 "use strict";
+
+const { getUserFromRequest } = require("./lib/auth");
 
 const EXPLAIN_PROMPT = `You are Rocky Raccoon, a friendly, calm safety helper for children in kindergarten through grade 5.
 A learner just picked an answer that is NOT the safest choice in a safety lesson quiz. Help them understand why.
@@ -34,15 +39,19 @@ function str(v, max) {
   return typeof v === "string" ? v.trim().slice(0, max) : "";
 }
 
-function validate(body) {
-  const ctx = body && typeof body.context === "object" && body.context ? body.context : null;
-  if (!ctx) return null;
+function validate(body, lessons) {
+  const lessonId = typeof body?.lessonId === "string" ? body.lessonId : "";
+  const sectionIndex = Number.isInteger(body?.sectionIndex) ? body.sectionIndex : -1;
+  const selectedIndex = Number.isInteger(body?.selectedIndex) ? body.selectedIndex : -1;
 
-  const answers = Array.isArray(ctx.answers)
-    ? ctx.answers.slice(0, 4).map(a => str(a, 200)).filter(Boolean)
+  const lesson = lessons.get(lessonId);
+  const section = lessons.section(lessonId, sectionIndex);
+  if (!lesson || !section) return null;
+
+  const answers = Array.isArray(section.answers)
+    ? section.answers.slice(0, 4).map(a => str(a, 200)).filter(Boolean)
     : [];
-  const correctIndex = Number.isInteger(ctx.correctIndex) ? ctx.correctIndex : -1;
-  const selectedIndex = Number.isInteger(body.selectedIndex) ? body.selectedIndex : -1;
+  const correctIndex = Number.isInteger(section.correct) ? section.correct : -1;
 
   if (answers.length < 2) return null;
   if (correctIndex < 0 || correctIndex >= answers.length) return null;
@@ -50,11 +59,12 @@ function validate(body) {
   if (selectedIndex === correctIndex) return null; // only explain wrong choices
 
   const out = {
-    lessonTitle: str(ctx.lessonTitle, 120),
-    sectionTitle: str(ctx.sectionTitle, 120),
-    body: str(ctx.body, 900),
-    callout: str(ctx.callout, 500),
-    question: str(ctx.question, 300),
+    lessonId,
+    lessonTitle: str(lesson.title, 120),
+    sectionTitle: str(section.title, 120),
+    body: str(Array.isArray(section.body) ? section.body.join(" ") : section.body, 1500),
+    callout: str(section.callout, 500),
+    question: str(section.q, 300),
     answers,
     correctIndex,
     selectedIndex
@@ -80,30 +90,38 @@ function buildInput(v) {
   ].join("\n");
 }
 
-module.exports = function registerExplain(app, { openai, supabase, rateLimit }) {
+module.exports = function registerExplain(app, { openai, supabase, rateLimit, lessons, moderate }) {
   app.post("/api/explain", rateLimit, async (req, res) => {
     try {
       if (!openai) return res.status(503).json({ error: "Rocky's AI service is not configured yet." });
 
-      const v = validate(req.body);
+      const v = validate(req.body, lessons);
       if (!v) return res.status(400).json({ error: "That question could not be explained." });
 
-      // Optional session check, same behavior as /api/chat: guests allowed, bad tokens rejected.
-      const auth = req.headers.authorization || "";
-      if (auth.startsWith("Bearer ") && supabase) {
-        const { error } = await supabase.auth.getUser(auth.slice(7));
-        if (error) return res.status(401).json({ error: "Your session has expired. Please log in again." });
+      // Guests may use the guest lesson; a bad token is always rejected.
+      const { user, invalid } = await getUserFromRequest(supabase, req);
+      if (invalid) return res.status(401).json({ error: "Your session has expired. Please log in again." });
+      if (lessons.requiresAccount(v.lessonId) && !user) {
+        return res.status(401).json({ error: "Please log in to use Rocky with this lesson." });
       }
 
       const response = await openai.responses.create({
         model: process.env.OPENAI_MODEL || "gpt-4.1-mini",
         instructions: EXPLAIN_PROMPT,
         input: buildInput(v),
-        max_output_tokens: 220
+        max_output_tokens: 220,
+        store: false
       });
 
       const reply = (response.output_text || "").trim().slice(0, 900);
       if (!reply) return res.status(502).json({ error: "Rocky couldn't make a reply just now." });
+
+      const check = await moderate(reply);
+      if (!check.ok) {
+        if (!check.failed) console.warn("Explain reply withheld by moderation:", check.items.flatMap(i => i.categories).join(", "));
+        return res.status(502).json({ error: "Rocky couldn't make a reply just now." });
+      }
+
       res.json({ reply });
     } catch (err) {
       console.error("Rocky explain error:", err.message);
