@@ -322,77 +322,63 @@
       },
   
       help: {
-        title: "Calling 911 & First Responders",
+        title: "Calling First Responders",
         icon: "🚑",
-        intro: "Learn when 911 is for emergencies, who first responders are, and what information dispatchers may ask.",
+        intro: "Emergency numbers are different around the world. Learn how to get help wherever you live or travel.",
         sections: [
           {
-            title: "What is 911?",
-            body: "911 is a special phone number you can call when someone needs emergency help right away. You can call 911 for a dangerous fire, someone who is seriously hurt, or another dangerous emergency.",
-            callout: "911 is for real emergencies, not jokes or games!",
-            q: "When should someone call 911?",
-            answers: [
-              "To ask about homework",
-              "For a dangerous fire or serious injury",
-              "To play a prank"
-            ],
+            title: "When should you get emergency help?",
+            body: "Call the local emergency number when someone is in immediate danger, has a serious injury or suddenly becomes very ill, or when there is a dangerous fire or another urgent threat. If you can, move to a safer place and tell a trusted grown-up.",
+            callout: "Emergency numbers are only for real emergencies. Never call one as a joke or just to practice.",
+            q: "Which situation needs an emergency call?",
+            answers: ["You want to know when a store closes", "Someone is badly hurt and needs help right away", "You want help with a game"],
             correct: 1,
-            why: "Correct! 911 is for urgent emergencies when someone needs help right away."
+            why: "Correct! Emergency services are for urgent situations when someone needs help right away."
+          },
+          {
+            title: "Emergency numbers are not the same everywhere",
+            body: "Different countries use different emergency numbers. Some places use one number for police, fire, and ambulance. Other places use different numbers for each service. Never assume that the number used in one country works in another.",
+            callout: "For example: 911 is used in the United States and Canada; 999 or 112 in the United Kingdom; 000 in Australia; 111 in New Zealand; and 112 in India and across the European Union.",
+            emergencyDirectory: true,
+            q: "You are visiting another country. What should you do before an emergency happens?",
+            answers: ["Assume your home country's number will work", "Ask a trusted adult to find and save the local emergency number", "Wait until there is an emergency to look it up"],
+            correct: 1,
+            why: "That's right! Learn the local number with a trusted adult before you need it."
           },
           {
             title: "Who are first responders?",
-            body: "First responders are trained helpers who respond to emergencies. Firefighters help with fires, rescues, and other emergencies. Paramedics and EMTs give medical help to people who are sick or injured. Police officers help protect people and respond to dangerous situations.",
-            callout: "First responders are important members of our community who work hard to help keep us safe!",
-            q: "Which first responder gives emergency medical care?",
-            answers: [
-              "A firefighter",
-              "A paramedic or EMT",
-              "A librarian"
-            ],
-            correct: 1,
-            why: "Exactly! Paramedics and EMTs provide emergency medical care."
+            body: "First responders are trained helpers who respond to emergencies. Firefighters help with fires and rescues. Paramedics and ambulance teams give medical help. Police officers respond to safety concerns and dangerous situations. The services and their phone numbers can be different in each country.",
+            callout: "First responders are trained to help. Follow their instructions and the directions of trusted adults.",
+            q: "Who can provide emergency medical care?",
+            answers: ["A paramedic or ambulance team", "A shop assistant", "A bus driver"],
+            correct: 0,
+            why: "Exactly! Paramedics and ambulance teams are trained to provide emergency medical care."
           },
           {
-            title: "How do you call 911?",
-            body: "If there is a serious emergency, get to a safe place, dial 9-1-1, tell the dispatcher what happened and where you are, listen carefully, answer questions, and stay on the phone until they tell you it's okay to hang up.",
-            callout: "Stay as calm as you can. The person answering the phone is there to help you!",
-            q: "What should you do when speaking with a 911 dispatcher?",
-            answers: [
-              "Hang up right away",
-              "Listen and answer their questions truthfully",
-              "Make up an answer"
-            ],
-            correct: 1,
-            why: "Right! Tell the truth, answer what you can, and follow the dispatcher's instructions."
-          },
-          {
-            title: "What should you tell the dispatcher?",
-            body: "A dispatcher is the person who answers your emergency call and sends help. They might ask where you are, what happened, whether anyone is hurt, and what phone number you're calling from. It's okay if you don't know every answer. Just tell the truth and do your best.",
-            callout: "You don't have to know everything! Explain what you see and listen carefully!",
-            q: "What if you don't know the answer to a dispatcher's question?",
-            answers: [
-              "Make something up",
-              "Hang up",
-              "Tell the truth and do your best"
-            ],
+            title: "What should you tell the person answering?",
+            body: "The person who answers your emergency call may ask where you are, what happened, and whether anyone is hurt. Tell the truth, speak as clearly as you can, and answer what you know. If you do not know an answer, say so. Stay on the line and follow their instructions.",
+            callout: "You do not need to know everything. Do your best, listen carefully, and never make up an answer.",
+            q: "What should you do if you do not know the answer to a question?",
+            answers: ["Guess or make something up", "Hang up immediately", "Say you do not know and listen for the next instruction"],
             correct: 2,
-            why: "That's right! It's okay not to know everything. Tell the truth and listen."
+            why: "Right! It is okay not to know. Be honest and follow the operator's instructions."
           },
           {
-            title: "Rocky's 911 practice",
-            body: "Imagine you see someone who has fallen and is not waking up. You are in a safe place and need to call 911. This is only a pretend practice question.",
-            callout: "Never call the real 911 number just to practice!",
-            q: "What should you tell the dispatcher?",
-            answers: [
-              "“I don't know! Goodbye!”",
-              "“Someone is hurt and won't wake up. I'm at this address.”",
-              "“Can you help me with homework?”"
-            ],
+            title: "Practice safely",
+            body: "With a trusted grown-up, practice saying your name, describing what happened, and explaining where you are. Learn the emergency number for the country where you live, and check it again when you travel.",
+            callout: "Never call a real emergency number just to practice. Ask a trusted adult to help you learn what to do.",
+            q: "How can you practice making an emergency call?",
+            answers: ["Call the real emergency number to test it", "Role-play with a trusted adult without calling emergency services", "Make a prank call with a friend"],
             correct: 1,
-            why: "Good practice! In a real emergency, tell the dispatcher what happened and your location. Never make a real call just to practice."
+            why: "Good job! Practice with a trusted adult without making a real emergency call."
           }
         ],
-        grownUps: "Review this lesson with a trusted adult and follow your family, school, and local emergency officials' plans."
+        grownUps: "Emergency numbers can change and may differ by service, region, and phone type. This in-lesson directory is a starter reference, not a complete worldwide list. Before travel or classroom use, verify the number for the exact country and local area with that country's official emergency service, government, or embassy. Teach children to follow local emergency instructions.",
+        sources: [
+          { name: "European Commission: 112 emergency number (EU)", url: "https://digital-strategy.ec.europa.eu/en/policies/112" },
+          { name: "Microsoft Learn: Emergency numbers by country and region (reference list)", url: "https://learn.microsoft.com/en-us/microsoftteams/emergency-numbers-reference" },
+          { name: "U.S. Department of State: Emergency numbers abroad", url: "https://travel.state.gov/content/dam/students-abroad/pdfs/911_ABROAD.pdf" }
+        ]
       },
   
       blackout: {
@@ -508,10 +494,10 @@
       },
       {
         id: "help",
-        title: "Calling 911 & First Responders",
+        title: "Calling First Responders",
         icon: "🚑",
         tag: "GETTING HELP",
-        desc: "Learn when to call 911 and what first responders do.",
+        desc: "Learn how emergency numbers differ around the world and how to get help.",
         time: "7 min"
       },
       {
