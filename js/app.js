@@ -35,7 +35,7 @@ function readGuest(){try{const p=JSON.parse(localStorage.getItem(guestKey)||'nul
 function persist(){if(user&&supabaseReady){saveRemoteProgress()}else{try{localStorage.setItem(guestKey,JSON.stringify(progress))}catch(e){}}updateStats()}
 async function saveRemoteProgress(){try{await supabaseClient.from('learner_progress').upsert({user_id:user.id,completed:progress.completed,points:progress.points,quizzes:progress.quizzes,updated_at:new Date().toISOString()},{onConflict:'user_id'})}catch(e){console.warn(e)}}
 async function loadRemoteProgress(){if(!user)return;try{const {data}=await supabaseClient.from('learner_progress').select('*').eq('user_id',user.id).maybeSingle();if(data)progress={completed:data.completed||[],points:data.points||0,quizzes:data.quizzes||0};else progress={completed:[],points:0,quizzes:0}}catch(e){console.warn(e)}updateStats();renderModules()}
-function updateStats(){document.getElementById('pointsTop').textContent=progress.points;document.getElementById('pointsStat').textContent=progress.points;document.getElementById('sidePoints').textContent=progress.points+' quest points';document.getElementById('lessonsDone').textContent =progress.completed.length + ' / ' + modules.length;document.getElementById('quizzesDone').textContent=progress.quizzes;document.getElementById('profileName').textContent=user?(user.user_metadata?.display_name||user.email?.split('@')[0]||'Learner'):'Guest Explorer';document.getElementById('profileMode').textContent=user?'Signed in · progress saved':'Guest mode · this browser';document.getElementById('topAuth').textContent=user?'Log out':'Log in';}
+function updateStats(){document.getElementById('pointsTop').textContent=progress.points;document.getElementById('pointsStat').textContent=progress.points;document.getElementById('sidePoints').textContent=progress.points+' quest points';document.getElementById('lessonsDone').textContent=progress.completed.length+' / '+modules.length;document.getElementById('quizzesDone').textContent=progress.quizzes;document.getElementById('profileName').textContent=user?(user.user_metadata?.display_name||'Explorer'):'Guest Explorer';document.getElementById('profileMode').textContent=user?'Guardian-managed account · progress saved':'Guest mode · this browser';document.getElementById('topAuth').textContent=user?'Log out':'Log in';}
 function moduleCard(m){let done=progress.completed.includes(m.id);return `<article class="module-card" tabindex="0" role="button" onclick="openLesson('${m.id}')" onkeydown="if(event.key==='Enter')openLesson('${m.id}')"><div class="module-art"><span class="tag">${done?'✓ COMPLETED':m.tag}</span>${m.icon}</div><h3>${m.title}</h3><p>${m.desc}</p><div class="module-foot"><span>◷ ${m.time} · Beginner</span><span>${done?'↻':'→'}</span></div><div class="progress"><span style="width:${done?'100%':'0%'}"></span></div></article>`}
 function renderModules(){document.getElementById('homeModules').innerHTML=modules.slice(0,3).map(moduleCard).join('');filterModules()}
 function filterModules(){let q=(document.getElementById('moduleSearch')?.value||'').toLowerCase();let arr=modules.filter(m=>(m.title+' '+m.desc+' '+m.id+' '+m.tag).toLowerCase().includes(q));document.getElementById('allModules').innerHTML=arr.map(moduleCard).join('');document.getElementById('noResults').style.display=arr.length?'none':'block'}
@@ -47,10 +47,57 @@ let s=d.sections[sectionIndex];document.getElementById('lessonContent').innerHTM
 function chooseAnswer(i){if(answered)return;selectedAnswer=i;answered=true;progress.quizzes++;if(i===lessonData[activeLesson].sections[sectionIndex].correct)progress.points+=5;persist();renderLesson()}
 function nextSection(){if(!answered)return;sectionIndex++;selectedAnswer=null;answered=false;renderLesson()}
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));document.getElementById('moduleSearch').addEventListener('input',filterModules);
-function renderAccount(){const el=document.getElementById('accountContent');if(user){el.innerHTML=`<div class="panel"><h3>Welcome back, Explorer!</h3><p class="desc">Your account is signed in.</p><div class="account-row"><span>Email</span><strong>${escapeHtml(user.email||'')}</strong></div><div class="account-row"><span>Lessons completed</span><strong>${progress.completed.length} / ${modules.length}</strong></div><div class="account-row"><span>Quest points</span><strong>${progress.points}</strong></div><p class="chat-tip">Your progress is saved to the configured Supabase project.</p><button class="secondary" onclick="logout()">Log out</button></div>`;return}
-let setupNote=supabaseReady?'Create an account to save your progress and unlock all six lessons.':'Guest mode is ready. For real account creation, the project owner must configure Supabase using the setup guide. No password is stored by this demo.';el.innerHTML=`<div class="panel"><h3>Join the adventure</h3><p class="desc">Create an account or log in to save your progress.</p><div id="authNotice" class="notice">${setupNote}</div><div class="form-grid"><div class="field"><label for="displayName">Learner name (for sign up)</label><input id="displayName" autocomplete="nickname" maxlength="60" placeholder="Explorer name"></div><div class="field"><label for="authEmail">Email</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com" required></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters" required></div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="authAction('signup')">Create account</button><button class="secondary" onclick="authAction('login')">Log in</button></div><p class="form-switch">You can keep using <button class="link-btn" onclick="showPage('home')">guest mode</button> without signing up.</p></div>`}
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-async function authAction(mode){const notice=document.getElementById('authNotice'),email=document.getElementById('authEmail').value.trim(),password=document.getElementById('authPassword').value,name=document.getElementById('displayName').value.trim();if(!supabaseReady){notice.textContent='Supabase is not configured yet. Follow README.md to enable real sign-up/login. Guest mode and lessons still work.';return}if(!email||password.length<8){notice.textContent='Enter a valid email and a password with at least 8 characters.';return}notice.textContent='Working…';let result;if(mode==='signup')result=await supabaseClient.auth.signUp({email,password,options:{data:{display_name:name||'Explorer'}}});else result=await supabaseClient.auth.signInWithPassword({email,password});if(result.error){notice.textContent=result.error.message;return}if(mode==='signup'&&!result.data.session){notice.textContent='Account created! Check your email for the confirmation link, then log in.';return}session=result.data.session;user=result.data.user;progress={completed:[],points:0,quizzes:0};await loadRemoteProgress();updateStats();renderAccount();notice.textContent=mode==='signup'?'Account created! Welcome to Safety Quest.':'You are logged in!';}
+let authMode='signup';
+function renderAccount(){
+ const el=document.getElementById('accountContent');
+ if(user){
+  const nickname=escapeHtml(user.user_metadata?.display_name||'Explorer');
+  el.innerHTML=`<div class="panel"><h3>Welcome back, ${nickname}!</h3><p class="desc">Your adventure is saved.</p><div class="account-row"><span>Explorer nickname</span><strong>${nickname}</strong></div><div class="account-row"><span>Lessons completed</span><strong>${progress.completed.length} / ${modules.length}</strong></div><div class="account-row"><span>Quest points</span><strong>${progress.points}</strong></div><p class="chat-tip">Your grown-up's email is kept out of your public Explorer profile.</p><button class="secondary" onclick="logout()">Log out</button></div>`;
+  return;
+ }
+ authMode='signup';
+ renderAuthForm();
+}
+function renderAuthForm(){
+ const el=document.getElementById('accountContent');
+ const isSignup=authMode==='signup';
+ const setupNote=supabaseReady
+  ? 'A parent or guardian should complete this step with you. Their email receives the account confirmation message.'
+  : 'Guest mode is ready. The project owner must configure Supabase before accounts can be created. No password is stored by this demo.';
+ el.innerHTML=`<div class="panel">
+  <h3>${isSignup?'Create your Explorer account':'Welcome back, Explorer!'}</h3>
+  <p class="desc">${isSignup?'Save your quests with a nickname. Ask a parent or guardian to help create the account.':'Log in using the parent or guardian email used when the account was created.'}</p>
+  <div id="authNotice" class="notice" role="status" aria-live="polite">${setupNote}</div>
+  ${isSignup?`<div class="field"><label for="displayName">Your Explorer nickname</label><input id="displayName" autocomplete="nickname" maxlength="20" placeholder="e.g. StarryFox" aria-describedby="nicknameHelp"><small id="nicknameHelp">Choose a fun nickname—not your real name, birthday, school, or other personal details.</small></div>`:''}
+  <div class="field"><label for="authEmail">Parent or guardian email</label><input id="authEmail" type="email" autocomplete="email" placeholder="grownup@example.com" required></div>
+  <div class="field"><label for="authPassword">${isSignup?'Create a password with your grown-up':'Password'}</label><input id="authPassword" type="password" autocomplete="${isSignup?'new-password':'current-password'}" minlength="8" placeholder="At least 8 characters" required></div>
+  ${isSignup?`<label class="consent-check"><input id="guardianAcknowledgement" type="checkbox"> I am the parent or legal guardian, and I am helping create this account and agree to the site's privacy information.</label>`:''}
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="authSubmit" type="button" onclick="authAction('${isSignup?'signup':'login'}')">${isSignup?'Create account':'Log in'}</button><button class="secondary" type="button" onclick="switchAuthMode()">${isSignup?'Already have an account? Log in':'Need an account? Sign up'}</button></div>
+  <p class="form-switch">You can keep using <button class="link-btn" onclick="showPage('home')">guest mode</button> without signing up.</p>
+ </div>`;
+}
+function switchAuthMode(){authMode=authMode==='signup'?'login':'signup';renderAuthForm()}
+function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+async function authAction(mode){
+ const notice=document.getElementById('authNotice');
+ const email=document.getElementById('authEmail')?.value.trim()||'';
+ const password=document.getElementById('authPassword')?.value||'';
+ const name=document.getElementById('displayName')?.value.trim()||'';
+ if(!supabaseReady){notice.textContent='Supabase is not configured yet. Follow the setup guide to enable accounts. Guest mode still works.';return}
+ if(!email||password.length<8){notice.textContent='Enter the parent or guardian email and a password with at least 8 characters.';return}
+ if(mode==='signup'){
+  const acknowledgement=document.getElementById('guardianAcknowledgement');
+  if(!acknowledgement?.checked){notice.textContent='Please ask your parent or guardian to review this step and check the box with you.';return}
+  if(!/^[A-Za-z0-9 _-]{3,20}$/.test(name)||/@|\\d{7,}/.test(name)){notice.textContent='Choose a nickname with 3–20 letters, numbers, spaces, underscores, or hyphens. Do not use personal information.';return}
+ }
+ notice.textContent='Working…';
+ const result=mode==='signup'
+  ? await supabaseClient.auth.signUp({email,password,options:{data:{display_name:name,account_type:'guardian_managed_child',guardian_acknowledged:true}}})
+  : await supabaseClient.auth.signInWithPassword({email,password});
+ if(result.error){notice.textContent=result.error.message;return}
+ if(mode==='signup'&&!result.data.session){notice.textContent='Account request created. A confirmation email has been sent to the parent or guardian email. The grown-up must open it to confirm the address before logging in.';return}
+ session=result.data.session;user=result.data.user;progress={completed:[],points:0,quizzes:0};await loadRemoteProgress();updateStats();renderAccount();
+}
 async function logout(){if(supabaseReady)await supabaseClient.auth.signOut();user=null;session=null;progress={completed:[],points:0,quizzes:0};readGuest();updateStats();renderAccount();showPage('home')}
 async function initAuth(){if(supabaseReady){const {data}=await supabaseClient.auth.getSession();session=data.session;user=session?.user||null;supabaseClient.auth.onAuthStateChange((_event,newSession)=>{session=newSession;user=newSession?.user||null;if(user)loadRemoteProgress();else{readGuest();updateStats()}renderAccount()});if(user)await loadRemoteProgress();else readGuest()}else readGuest();updateStats();renderModules();renderAccount()}
 const prepared=[
