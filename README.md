@@ -25,7 +25,7 @@ Students can explore six educational topics:
 - **School Drills:** Learn how to respond appropriately during school emergency drills.
 - **Shelter-in-Place:** Understand when and why it is important to remain indoors during certain emergencies.
 - **Emergency Kits:** Learn about essential supplies to include in an emergency preparedness kit.
-- **Calling First Responders:** Understand when and how to contact emergency services.
+- **Calling First Responders:** Learn when to seek urgent help, how first responders help, and how emergency numbers differ across countries. The lesson includes a starter country lookup that should be verified against official local sources.
 
 ### Ask Rocky — AI Learning Assistant
 
