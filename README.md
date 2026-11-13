@@ -95,7 +95,8 @@ To run the project locally:
 2. Navigate to the project directory.
 3. Review the `.env.example` file for required environment variables.
 4. Configure the necessary Supabase and AI API credentials.
-5. Follow the project's setup instructions to install dependencies and launch the application.
+5. Install dependencies from the repository root with `npm install`.
+6. Start the application with `npm start` (or use `npm run dev` during development).
 
 **Note:** Some features, including authentication, saved progress, and AI-powered conversations, require appropriate service configuration. Guest learning functionality provides an alternative way to explore the prototype.
 
