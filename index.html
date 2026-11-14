@@ -31,6 +31,7 @@
       <button class="active" data-page="home">⌂ <span class="nav-text">Home</span></button>
       <button data-page="explore">✦ <span class="nav-text">Lessons</span></button>
       <button data-page="flashcards">🗂️ <span class="nav-text">Flashcards</span></button>
+      <button data-page="shop">🛍️ <span class="nav-text">Rocky’s Shop</span></button>
       <button data-page="rocky">💬 <span class="nav-text">Ask Rocky</span></button>
       <button data-page="account">👤 <span class="nav-text">Account</span></button>
     </nav>
@@ -158,6 +159,19 @@
         <button class="secondary" id="flashcardNext" type="button">Next →</button>
       </div>
       <p class="flashcard-note">These cards are for extra practice. They do not affect lesson completion or quiz scores.</p>
+    </div>
+  </section>
+
+  <section id="page-shop" class="page">
+    <div class="shop-page">
+      <h1 class="hello">Rocky’s Shop</h1>
+      <p class="sub">Spend your quest points on colorful raccoon avatars and fun accessories. Your purchases are saved with your progress.</p>
+      <div class="shop-wallet panel"><div><span class="shop-wallet-label">Your wallet</span><strong><span id="shopPoints">0</span> quest points</strong></div><div id="shopAvatarPreview" class="shop-avatar-preview" aria-label="Your current Rocky avatar"></div></div>
+      <div class="section-head"><div><h2>Raccoon avatars</h2><p>Choose a color that feels like you.</p></div></div>
+      <div id="avatarShop" class="shop-grid"></div>
+      <div class="section-head shop-section-head"><div><h2>Accessories</h2><p>Give Rocky a little extra personality.</p></div></div>
+      <div id="accessoryShop" class="shop-grid"></div>
+      <p id="shopMessage" class="shop-message" role="status" aria-live="polite">Pick an item to see its details.</p>
     </div>
   </section>
 
