@@ -45,7 +45,17 @@ The AI integration is designed to use reliable emergency preparedness informatio
 - Interactive quizzes and knowledge checks.
 - Immediate feedback to help students understand their answers.
 - Progress tracking and quest points.
+- Daily safety challenges with explanations and a once-per-day five-point reward.
+- Achievement badges for lesson completion, flashcard mastery, and learning milestones.
+- A visual learning journey showing completed lessons and the next suggested lesson.
+- Optional larger text and reduced-motion display preferences.
 - Rewards for completing educational activities.
+
+### Daily Practice and Accessibility
+
+The home dashboard includes a rotating daily safety question with age-appropriate explanations, a five-point completion reward, achievement milestones, and a visual lesson-progress indicator. Larger text and reduced-motion preferences are available and saved in the current browser.
+
+Daily challenge completion and display preferences are currently browser-specific. Core learner points continue to use the existing guest or Supabase progress storage.
 
 ### User Accounts and Guest Access
 
