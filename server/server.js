@@ -179,7 +179,7 @@ function createApp({ openai, supabase, lessons }) {
           { role: "user", content: message }
         ],
         max_tokens: 350,
-        extra_body: { cache_salt: cacheSalt }
+        cache_salt: cacheSalt
       });
       const reply = String(response.choices?.[0]?.message?.content || "").trim();
       if (!reply) return res.status(502).json({ error: "Rocky couldn't make a reply just now. Please try again." });
