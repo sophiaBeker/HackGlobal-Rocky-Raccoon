@@ -942,3 +942,33 @@ footer {
 .theme-copy small{font-size:10px;color:var(--muted)}
 .theme-status{font-size:11px;font-weight:900;color:var(--green)}
 @media(max-width:680px){.theme-grid{grid-template-columns:1fr}}
+
+
+/* Rocky's avatar shop */
+.shop-page{max-width:1050px}
+.shop-wallet{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:22px 0 28px;background:var(--green2)}
+.shop-wallet-label{display:block;color:var(--muted);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+.shop-wallet strong{font:900 22px Nunito}
+.shop-avatar-preview{width:92px;height:92px;display:grid;place-items:center;background:#ffffff9c;border-radius:22px}
+.shop-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.shop-item{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:15px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:7px;min-width:0}
+.shop-item-active{border:2px solid var(--green);background:var(--green2)}
+.shop-item-art{height:104px;width:100%;display:grid;place-items:center;background:var(--cream);border-radius:12px}
+.shop-item strong{font:900 14px Nunito}
+.shop-item p{font-size:11px;color:var(--muted);margin:0;min-height:32px}
+.shop-item small{font-size:11px;font-weight:900;color:var(--green);margin-top:auto}
+.shop-item button{margin-top:5px;width:100%;justify-content:center}
+.shop-section-head{margin-top:30px}
+.shop-message{background:var(--green2);border-radius:12px;padding:12px 15px;color:var(--ink);font-size:12px;margin-top:18px}
+.raccoon-art{position:relative;display:inline-grid;place-items:center;flex:none}
+.raccoon-art svg{width:100%;height:100%;overflow:visible}
+.raccoon-art.small{width:34px;height:34px}
+.raccoon-art.large{width:84px;height:84px}
+.raccoon-head{fill:var(--fur)}
+.raccoon-ears{fill:var(--fur);stroke:#454b4a;stroke-width:3;stroke-linejoin:round}
+.raccoon-mask{fill:#454b4a}
+.raccoon-accessory{position:absolute;top:-12%;right:-15%;font-size:30px;filter:drop-shadow(0 2px 1px #0002);line-height:1}
+.raccoon-art.small .raccoon-accessory{font-size:14px;top:-10%;right:-16%}
+.profile .avatar{background:transparent;width:38px;height:38px}
+@media(max-width:850px){.shop-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.shop-grid{grid-template-columns:1fr 1fr}.shop-item{padding:10px}.shop-wallet{padding:13px}}
