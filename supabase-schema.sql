@@ -37,6 +37,11 @@ alter table public.learner_progress
   add column if not exists flashcards_known text[] not null default '{}',
   add column if not exists flashcards_review text[] not null default '{}';
 
+-- Track one-time quiz question rewards so learners can earn points
+-- for questions they eventually master, without repeating rewards.
+alter table public.learner_progress
+  add column if not exists quiz_question_rewards jsonb not null default '{}'::jsonb;
+
 -- Avatar shop ownership and equipped cosmetic items.
 alter table public.learner_progress
   add column if not exists owned_avatars text[] not null default array['classic'],
