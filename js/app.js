@@ -179,12 +179,14 @@ function renderAccount(){
     <h3>${signup?'Create your account':'Log in'}</h3>
     <p class="desc">${signup?'Choose a nickname and account details to save your progress.':'Welcome back! Log in to continue your adventure.'}</p>
     <div id="authNotice" class="notice">${setupNote}</div>
-    <div class="form-grid">
-      ${signup?`<div class="field"><label for="displayName">Choose a nickname</label><input id="displayName" autocomplete="nickname" maxlength="20" placeholder="e.g. StarryFox or BraveBadger"><p class="chat-tip">Use a fun nickname instead of your real name. Avoid your full name, birthday, school, or other personal details.</p></div>`:''}
-      <div class="field"><label for="authEmail">Email</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com" required></div>
-      <div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" autocomplete="${signup?'new-password':'current-password'}" minlength="8" placeholder="${signup?'At least 8 characters':'Enter your password'}" required></div>
-    </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" type="button" onclick="authAction('${signup?'signup':'login'}')">${signup?'Create account':'Log in'}</button><button class="secondary" type="button" onclick="setAuthView('choice')">Back</button></div>
+    <form id="authForm" onsubmit="event.preventDefault();authAction('${signup?'signup':'login'}')">
+      <div class="form-grid">
+        ${signup?`<div class="field"><label for="displayName">Choose a nickname</label><input id="displayName" autocomplete="nickname" maxlength="20" placeholder="e.g. StarryFox or BraveBadger" required></div>`:''}
+        <div class="field"><label for="authEmail">Email</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com" required></div>
+        <div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" autocomplete="${signup?'new-password':'current-password'}" minlength="8" placeholder="${signup?'At least 8 characters':'Enter your password'}" required></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" type="submit">${signup?'Create account':'Log in'}</button><button class="secondary" type="button" onclick="setAuthView('choice')">Back</button></div>
+    </form>
     <p class="form-switch">${signup?'Already have an account?':'New to Safety Quest?'} <button class="link-btn" type="button" onclick="setAuthView('${signup?'login':'signup'}')">${signup?'Log in':'Create an account'}</button></p>
     <p class="form-switch">Or continue in <button class="link-btn" type="button" onclick="showPage('home')">guest mode</button>.</p>
   </div>`;
