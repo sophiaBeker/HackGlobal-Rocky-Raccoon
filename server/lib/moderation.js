@@ -43,7 +43,7 @@ function createModerator(openai) {
       // Keep enough metadata to diagnose invalid keys, permissions, rate limits, and outages.
       // Never log the API key or the text being moderated.
       console.error("OpenAI moderation check failed:", {
-        message: err.message,
+        // Do not log provider error messages; they may include a masked credential fragment.
         status: err.status || err.statusCode || null,
         code: err.code || null,
         type: err.type || null,
