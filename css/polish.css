@@ -1,0 +1,108 @@
+/* Safety Quest — polish layer. Load AFTER every other stylesheet. */
+
+/* ---------- Accessibility ---------- */
+.skip-link{position:absolute;left:-999px;top:8px;z-index:100;background:var(--ink);color:#fff;padding:10px 14px;border-radius:10px;font-weight:800}
+.skip-link:focus{left:8px}
+:focus-visible{outline:3px solid #1f6feb;outline-offset:2px;border-radius:6px}
+[tabindex="-1"]:focus{outline:none}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .module-card:hover,.flashcard:hover{transform:none}
+}
+
+/* ---------- Kid-friendly sizes and tap targets ---------- */
+.sub{font-size:16px}
+.crumb{font-size:13px}
+.pill{font-size:13px;min-height:36px;display:inline-flex;align-items:center}
+.btn,.secondary{min-height:44px;font-size:14px;padding:11px 16px}
+.link-btn{font-size:14px;min-height:36px}
+.nav button{font-size:14px;min-height:44px}
+.nav-label{font-size:11px}
+.section-head p,.panel .desc{font-size:14px}
+.stat small{font-size:12px}
+.module-card h3{font-size:17px}
+.module-card p{font-size:13px;line-height:1.5}
+.module-foot{font-size:12px}
+.tag{font-size:10px;padding:4px 7px}
+.lesson-hero p{font-size:14px}
+.lesson-panel p{font-size:15px;line-height:1.7}
+.callout{font-size:14px;line-height:1.6}
+.quiz-option{font-size:16px;padding:14px;min-height:50px}
+.feedback{font-size:14px}
+.bubble,.chat-msg{font-size:15px}
+.chat-form input,.field input,.searchbar{font-size:16px}
+.chat-form input{min-height:46px}
+.chat-tip,footer{font-size:12px}
+.field label{font-size:14px}
+.notice{font-size:14px}
+.account-row{font-size:14px}
+.theme-copy small,.shop-item p,.shop-item small{font-size:12px}
+.sq-quiz-prompt{font-size:15px}
+.sq-sources{font-size:14px}
+.sq-reading-footer{font-size:13px}
+.sq-reading > p,.sq-summary > p,.sq-quiz > p{font-size:16px}
+.flashcard-toolbar label,.flashcard-progress{font-size:14px}
+.flashcard-toolbar select{font-size:14px;min-height:44px}
+.flashcard-note{font-size:13px}
+body.large-text .quiz-option{font-size:19px}
+body.large-text .lesson-panel p,body.large-text .sq-reading > p{font-size:19px}
+body.large-text .callout,body.large-text .notice{font-size:17px}
+
+/* ---------- Per-module colours (before any theme is unlocked) ---------- */
+.module-card{border-top:4px solid var(--mod-accent,var(--line))}
+.module-card .module-art{background:var(--mod-bg,#f8e7ca)}
+.module-card[data-module="earthquake"]{--mod-bg:#e3e6cc;--mod-accent:#7b8f4e}
+.module-card[data-module="fire"]{--mod-bg:#fbd9c4;--mod-accent:#d9663a}
+.module-card[data-module="flood"]{--mod-bg:#d6e8f5;--mod-accent:#3f86b5}
+.module-card[data-module="kit"]{--mod-bg:#f4eac6;--mod-accent:#c0a23f}
+.module-card[data-module="help"]{--mod-bg:#e8ddf4;--mod-accent:#8566b3}
+.module-card[data-module="blackout"]{--mod-bg:#dcdff3;--mod-accent:#5a5ea8}
+.lesson-hero[data-module="earthquake"]{background:#e3e6cc}
+.lesson-hero[data-module="fire"]{background:#fbd9c4}
+.lesson-hero[data-module="flood"]{background:#d6e8f5}
+.lesson-hero[data-module="kit"]{background:#f4eac6}
+.lesson-hero[data-module="help"]{background:#e8ddf4}
+.lesson-hero[data-module="blackout"]{background:#dcdff3}
+
+/* ---------- Locked lessons ---------- */
+.module-card.locked{opacity:.92}
+.module-card.locked .module-art{filter:saturate(.7)}
+.lock-badge{position:absolute;top:7px;right:7px;font-size:11px;font-weight:900;background:#fff;color:#40584f;border-radius:999px;padding:3px 8px;border:1px solid var(--line)}
+.sq-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:60;max-width:min(520px,calc(100vw - 24px));display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--ink);color:#fff;padding:14px 16px;border-radius:16px;box-shadow:0 12px 35px #0003;font-size:15px}
+.sq-toast[hidden]{display:none}
+.sq-toast .btn{min-height:40px}
+.sq-toast .toast-close{background:transparent;border:0;color:#fff;font-size:20px;min-width:40px;min-height:40px}
+
+/* ---------- Rocky SVG sizing ---------- */
+.logo .raccoon-art{width:34px;height:34px}
+.rocky-mini .raccoon-art{width:38px;height:38px}
+.rocky-mini{overflow:visible}
+.hero-art .raccoon-art{transform:scale(1.8)}
+.hero-art{overflow:visible}
+
+/* ---------- Chat chips ---------- */
+.chat-chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.chat-chip{border:1px solid var(--line);background:var(--green2);color:var(--green);border-radius:999px;padding:9px 14px;font-weight:800;font-size:14px;min-height:40px}
+.chat-chip:hover{background:var(--lime);color:var(--ink)}
+.chat-chip:disabled{opacity:.5;cursor:not-allowed}
+
+/* ---------- Read aloud + streak ---------- */
+.read-aloud{margin:0 0 14px;display:inline-flex;align-items:center;gap:6px}
+.streak-pill{background:#fff5e7;border-color:#f0d3a8;color:#73512f}
+
+/* ---------- Mobile bottom tab bar ---------- */
+.tabbar,.more-sheet{display:none}
+@media (max-width:680px){
+  .nav{display:none}
+  aside{justify-content:flex-start}
+  main{padding-bottom:104px}
+  .tabbar{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--card);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));box-shadow:0 -6px 20px #22453812}
+  .tabbar button{border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:56px;padding:6px 2px;border-radius:12px;color:#40584f;font:800 11px 'DM Sans',sans-serif}
+  .tabbar .tab-ico{font-size:21px;line-height:1}
+  .tabbar button.active{background:var(--green2);color:var(--green)}
+  .more-sheet{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;position:fixed;left:10px;right:10px;bottom:86px;z-index:55;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:10px;box-shadow:0 12px 35px #0003}
+  .more-sheet[hidden]{display:none}
+  .more-sheet button{border:1px solid var(--line);background:#fff;border-radius:14px;min-height:64px;font:800 13px 'DM Sans',sans-serif;color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+  .more-sheet button.active{background:var(--green2);color:var(--green)}
+  .sq-toast{bottom:96px}
+}

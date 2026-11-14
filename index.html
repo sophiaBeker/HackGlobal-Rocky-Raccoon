@@ -14,9 +14,11 @@
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="css/lesson-experience.css">
 <link rel="stylesheet" href="css/flashcards.css">
+<link rel="stylesheet" href="css/polish.css">
 </head>
 
 <body>
+<a class="skip-link" href="#main">Skip to main content</a>
 <div class="app">
 
 <aside>
@@ -27,7 +29,7 @@
 
   <div>
     <div class="nav-label">YOUR SPACE</div>
-    <nav class="nav">
+    <nav class="nav" aria-label="Main">
       <button class="active" data-page="home">⌂ <span class="nav-text">Home</span></button>
       <button data-page="explore">✦ <span class="nav-text">Lessons</span></button>
       <button data-page="flashcards">🗂️ <span class="nav-text">Flashcards</span></button>
@@ -50,7 +52,7 @@
   </div>
 </aside>
 
-<main>
+<main id="main" tabindex="-1">
   <div class="topbar">
     <div class="crumb"><strong>Safety Quest</strong> / <span id="crumbPage">Home</span></div>
     <div class="top-actions">
@@ -70,7 +72,7 @@
         <p>Learn what to do in an emergency with friendly lessons and quick challenges made just for you.</p>
         <button class="btn" onclick="openLesson('earthquake')">Start guest lesson →</button>
       </div>
-      <div class="hero-art">🦝</div>
+      <div class="hero-art" aria-hidden="true">🦝</div>
     </div>
 
     <div class="section-head">
@@ -85,8 +87,6 @@
       <div class="stat"><div class="stat-icon">⭐</div><div><small>Quest points</small><strong id="pointsStat">0</strong></div></div>
       <div class="stat"><div class="stat-icon">🎯</div><div><small>Quiz attempts</small><strong id="quizzesDone">0</strong></div></div>
     </div>
-
-
 
     <div class="section-head">
       <div>
@@ -109,7 +109,7 @@
         <h3>A note from Rocky</h3>
         <p class="desc">Your friendly safety guide</p>
         <div class="chat-preview">
-          <div class="rocky-mini">🦝</div>
+          <div class="rocky-mini" aria-hidden="true">🦝</div>
           <div class="bubble">“It's okay to have questions! Learning what to do ahead of time can help you feel prepared.”</div>
         </div>
         <button class="secondary" style="margin-top:12px" onclick="showPage('rocky')">Talk to Rocky →</button>
@@ -120,7 +120,7 @@
   <section id="page-explore" class="page">
     <h1 class="hello">Explore lessons</h1>
     <p class="sub">Choose a quest and practice one skill at a time. Ask a trusted grown-up if you need help.</p>
-    <input id="moduleSearch" class="searchbar" type="search" placeholder="Search earthquakes, fire safety, drills..." aria-label="Search lessons">
+    <input id="moduleSearch" class="searchbar" type="search" placeholder="Search earthquakes, fire, floods, blackouts..." aria-label="Search lessons">
     <div class="module-grid" id="allModules"></div>
     <p id="noResults" class="sub" style="display:none">No lessons match that search.</p>
   </section>
@@ -133,16 +133,10 @@
         <label for="flashcardTopic">Study topic</label>
         <select id="flashcardTopic" aria-label="Choose a flashcard topic">
           <option value="all">All modules</option>
-          <option value="earthquake">Earthquake Ready</option>
-          <option value="fire">Fire Safety Basics</option>
-          <option value="drill">Practice Makes Ready</option>
-          <option value="shelter">Shelter Together</option>
-          <option value="kit">Emergency Kit Quest</option>
-          <option value="help">How to Get Help</option>
         </select>
         <button class="secondary" id="shuffleFlashcards" type="button">🔀 Shuffle</button>
       </div>
-      <div class="flashcard-progress"><span id="flashcardCount">Card 1 of 18</span><span id="flashcardKnown">0 known</span></div>
+      <div class="flashcard-progress"><span id="flashcardCount">Card 1 of 1</span><span id="flashcardKnown">0 known</span></div>
       <div class="flashcard-progress-track"><span id="flashcardProgressFill"></span></div>
       <button class="flashcard" id="flashcard" type="button" aria-label="Flip flashcard" aria-pressed="false">
         <span class="flashcard-topic" id="flashcardTopicLabel">EARTHQUAKE READY</span>
@@ -183,10 +177,10 @@
       <div id="ownedAvatarChoices" class="shop-grid"></div>
       <div class="section-head shop-section-head"><div><h2>Your accessories</h2><p>Mix and match accessories you have purchased.</p></div></div>
       <div id="ownedAccessoryChoices" class="shop-grid"></div>
-          <div class="panel theme-panel">
-      <div class="section-head"><div><h2>Your themes</h2><p>Themes are unlocked by earning a perfect score in a module quiz.</p></div><strong id="themeUnlockCount">0 / 6 unlocked</strong></div>
-      <div id="themeCollection" class="theme-grid"></div>
-    </div>
+      <div class="panel theme-panel">
+        <div class="section-head"><div><h2>Your themes</h2><p>Themes are unlocked by earning a perfect score in a module quiz.</p></div><strong id="themeUnlockCount">0 / 6 unlocked</strong></div>
+        <div id="themeCollection" class="theme-grid"></div>
+      </div>
     </div>
   </section>
 
@@ -204,23 +198,30 @@
 
       <div class="panel" style="margin-top:20px">
         <div class="chat-preview">
-          <div class="rocky-mini">🦝</div>
+          <div class="rocky-mini" aria-hidden="true">🦝</div>
           <div class="bubble">
             <strong>Rocky Raccoon</strong><br>
             Hi, Explorer! Ask me about the lessons, or ask a follow-up question. I'll do my best to explain safety topics in kid-friendly words.
           </div>
         </div>
 
-        <div id="chatThread" class="chat-thread">
+        <div id="chatThread" class="chat-thread" aria-live="polite">
           <div class="chat-msg">Try asking: “What does Drop, Cover, and Hold On mean?”</div>
         </div>
 
+        <div class="chat-chips" aria-label="Question ideas">
+          <button type="button" class="chat-chip" data-q="What does Drop, Cover, and Hold On mean?">Drop, Cover, Hold On?</button>
+          <button type="button" class="chat-chip" data-q="What should I do when the fire alarm rings?">Fire alarm 🔥</button>
+          <button type="button" class="chat-chip" data-q="Why is floodwater dangerous?">Floodwater 🌊</button>
+          <button type="button" class="chat-chip" data-q="What goes in an emergency kit?">Emergency kit 🎒</button>
+          <button type="button" class="chat-chip" data-q="What should I do in a blackout?">Blackout 🔦</button>
+        </div>
+
         <form id="chatForm" class="chat-form">
-          <input id="chatInput" maxlength="800" required autocomplete="off" autocapitalize="sentences" placeholder="Ask Rocky a question..." aria-label="Ask Rocky">
+          <input id="chatInput" maxlength="800" required placeholder="Ask Rocky a question..." aria-label="Ask Rocky">
           <button id="chatSubmit" class="btn">Send ↗</button>
         </form>
 
-        <p id="chatStatus" class="chat-tip">If AI is configured by the project team, Rocky can hold a real conversation. Otherwise, prepared demo answers are used.</p>
         <p class="chat-tip">Safety note: In a real emergency, follow your teacher, caregiver, or emergency professionals. Do not share private information with Rocky.</p>
       </div>
     </div>
@@ -239,6 +240,22 @@
 </main>
 </div>
 
+<!-- Mobile bottom navigation (hidden on larger screens) -->
+<nav class="tabbar" aria-label="Main (mobile)">
+  <button data-page="home"><span class="tab-ico" aria-hidden="true">⌂</span><span>Home</span></button>
+  <button data-page="explore"><span class="tab-ico" aria-hidden="true">✦</span><span>Lessons</span></button>
+  <button data-page="rocky"><span class="tab-ico" aria-hidden="true">💬</span><span>Rocky</span></button>
+  <button data-page="flashcards"><span class="tab-ico" aria-hidden="true">🗂️</span><span>Cards</span></button>
+  <button id="tabMore" type="button" aria-expanded="false" aria-controls="moreSheet"><span class="tab-ico" aria-hidden="true">☰</span><span>More</span></button>
+</nav>
+<div id="moreSheet" class="more-sheet" hidden>
+  <button data-page="customize"><span aria-hidden="true">🎨</span>Customize</button>
+  <button data-page="shop"><span aria-hidden="true">🛍️</span>Shop</button>
+  <button data-page="account"><span aria-hidden="true">👤</span>Account</button>
+</div>
+
+<div id="sqToast" class="sq-toast" role="status" aria-live="polite" hidden></div>
+
 <!-- Configuration -->
 <script src="config.js"></script>
 
@@ -254,6 +271,9 @@
 <script src="js/lesson-experience.js"></script>
 <script src="js/rocky-why.js"></script>
 <script src="js/flashcards.js"></script>
+
+<!-- Visual and usability polish (keep last) -->
+<script src="js/polish.js"></script>
 
 </body>
 </html>
