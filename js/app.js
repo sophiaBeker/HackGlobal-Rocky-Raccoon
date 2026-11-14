@@ -163,7 +163,7 @@ async function askRocky(q){if(!CONFIG.aiEnabled)return preparedAnswer(q);try{con
 function renderRockyMessage(element, text){
   // Render only the small Markdown subset Rocky needs. Build DOM nodes rather
   // than using innerHTML so model output can never inject HTML or scripts.
-  const parts = String(text || '').split(/(\\*\\*[^*]+\\*\\*)/g);
+  const parts = String(text || '').split(/(\*\*[^*]+\*\*)/g);
   element.replaceChildren();
   for (const part of parts) {
     if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
