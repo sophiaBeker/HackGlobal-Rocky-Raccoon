@@ -145,8 +145,10 @@ function renderAccount(){const el=document.getElementById('accountContent');if(u
 let setupNote=supabaseReady?'Create an account to save your progress and unlock all six lessons.':'Guest mode is ready. For real account creation, the project owner must configure Supabase using the setup guide. No password is stored by this demo.';el.innerHTML=`<div class="panel"><h3>Join the adventure</h3><p class="desc">Create an account or log in to save your progress.</p><div id="authNotice" class="notice">${setupNote}</div><div class="form-grid"><div class="field"><label for="displayName">Choose a nickname</label><input id="displayName" autocomplete="nickname" maxlength="20" placeholder="e.g. StarryFox or BraveBadger"><p class="chat-tip">Use a fun nickname instead of your real name. Avoid your full name, birthday, school, or other personal details.</p></div><div class="field"><label for="authEmail">Email</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com" required></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters" required></div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="authAction('signup')">Create account</button><button class="secondary" onclick="authAction('login')">Log in</button></div><p class="form-switch">You can keep using <button class="link-btn" onclick="showPage('home')">guest mode</button> without signing up.</p></div>`}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 async function authAction(mode){const notice=document.getElementById('authNotice'),email=document.getElementById('authEmail').value.trim(),password=document.getElementById('authPassword').value,name=document.getElementById('displayName').value.trim();if(!supabaseReady){notice.textContent='Supabase is not configured yet. Follow README.md to enable real sign-up/login. Guest mode and lessons still work.';return}if(!email||password.length<8){notice.textContent='Enter a valid email and a password with at least 8 characters.';return}if(mode==='signup'&&!/^[A-Za-z0-9 _-]{3,20}$/.test(name)){notice.textContent='Choose a nickname with 3–20 letters, numbers, spaces, hyphens, or underscores. Do not use your real name.';return}notice.textContent='Working…';let result;if(mode==='signup')result=await supabaseClient.auth.signUp({email,password,options:{data:{display_name:name||'Explorer'}}});else result=await supabaseClient.auth.signInWithPassword({email,password});if(result.error){notice.textContent=result.error.message;return}if(mode==='signup'&&!result.data.session){notice.textContent='Account created! Check your email for the confirmation link, then log in.';return}session=result.data.session;user=result.data.user;progress={completed:[],points:0,quizzes:0,unlockedThemes:[],activeTheme:'default',flashcardsKnown:[],flashcardsReview:[],ownedAvatars:['classic'],activeAvatar:'classic',ownedAccessories:['none'],activeAccessory:'none'};await loadRemoteProgress();updateStats();renderAccount();notice.textContent=mode==='signup'?'Account created! Welcome to Safety Quest.':'You are logged in!';}
-async function logout(){if(supabaseReady)await supabaseClient.auth.signOut();user=null;session=null;progress={completed:[],points:0,quizzes:0,unlockedThemes:[],activeTheme:'default',flashcardsKnown:[],flashcardsReview:[],ownedAvatars:['classic'],activeAvatar:'classic',ownedAccessories:['none'],activeAccessory:'none'};readGuest();applySiteTheme();if(typeof applyFlashcardProgress==='function')applyFlashcardProgress();updateStats();renderAccount();showPage('home')}
-async function initAuth(){if(supabaseReady){const {data}=await supabaseClient.auth.getSession();session=data.session;user=session?.user||null;supabaseClient.auth.onAuthStateChange((_event,newSession)=>{session=newSession;user=newSession?.user||null;if(user)loadRemoteProgress();else{readGuest();applySiteTheme();if(typeof applyFlashcardProgress==='function')applyFlashcardProgress();updateStats()}renderAccount()});if(user)await loadRemoteProgress();else readGuest()}else readGuest();applySiteTheme();if(typeof applyFlashcardProgress==='function')applyFlashcardProgress();updateStats();renderModules();renderThemes();renderShop();renderAccount()}
+async function logout(){resetConversationHistory();if(supabaseReady)await supabaseClient.auth.signOut();user=null;session=null;progress={completed:[],points:0,quizzes:0,unlockedThemes:[],activeTheme:'default',flashcardsKnown:[],flashcardsReview:[],ownedAvatars:['classic'],activeAvatar:'classic',ownedAccessories:['none'],activeAccessory:'none'};readGuest();applySiteTheme();if(typeof applyFlashcardProgress==='function')applyFlashcardProgress();updateStats();renderAccount();showPage('home')}
+async function initAuth(){if(supabaseReady){const {data}=await supabaseClient.auth.getSession();session=data.session;user=session?.user||null;supabaseClient.auth.onAuthStateChange((_event,newSession)=>{
+    if ((user?.id || null) !== (newSession?.user?.id || null)) {
+        resetConversationHistory();}session=newSession;user=newSession?.user||null;if(user)loadRemoteProgress();else{readGuest();applySiteTheme();if(typeof applyFlashcardProgress==='function')applyFlashcardProgress();updateStats()}renderAccount()});if(user)await loadRemoteProgress();else readGuest()}else readGuest();applySiteTheme();if(typeof applyFlashcardProgress==='function')applyFlashcardProgress();updateStats();renderModules();renderThemes();renderShop();renderAccount()}
 const prepared=[
 {keys:['earthquake','shake','drop','cover','hold on'],answer:'For an earthquake indoors, remember Drop, Cover, and Hold On. Drop to your hands and knees, protect your head and neck under sturdy cover if available, and hold on until the shaking stops. Follow your teacher or caregiver’s instructions afterward.'},
 {keys:['fire','smoke','match','lighter','burn'],answer:'Stay away from matches and lighters. If you see fire or smell smoke, alert a trusted grown-up and follow your practiced escape plan. Get outside and stay outside during a building fire. Never go back in for belongings.'},
@@ -157,5 +159,111 @@ const prepared=[
 ];
 function preparedAnswer(q){const t=q.toLowerCase();for(const x of prepared)if(x.keys.some(k=>t.includes(k)))return x.answer;return 'That is a good question, Explorer! I can help with earthquake safety, fire safety, school drills, sheltering in place, emergency kits, and getting help. Try asking about one of those topics, and remember to talk with a trusted grown-up about your own family or school plan.'}
 async function askRocky(q){if(!CONFIG.aiEnabled)return preparedAnswer(q);try{const res=await fetch(CONFIG.chatEndpoint||'/api/chat',{method:'POST',headers:{'Content-Type':'application/json',...(session?.access_token?{Authorization:'Bearer '+session.access_token}:{})},body:JSON.stringify({message:q,history:chatHistory.slice(-10)})});if(!res.ok)throw new Error('Chat service returned '+res.status);const data=await res.json();if(!data.reply)throw new Error('Empty reply');return data.reply}catch(e){console.error(e);return 'I am having trouble connecting right now. Here is a prepared safety tip: stay with a trusted grown-up and follow your school or family emergency plan. You can try your question again in a moment.'}}
-document.getElementById('chatForm').addEventListener('submit',async e=>{e.preventDefault();const input=document.getElementById('chatInput'),q=input.value.trim();if(!q)return;const thread=document.getElementById('chatThread'),send=document.getElementById('chatSubmit');const u=document.createElement('div');u.className='chat-msg user';u.textContent=q;thread.appendChild(u);input.value='';input.disabled=true;send.disabled=true;const pending=document.createElement('div');pending.className='chat-msg';pending.textContent='Rocky is thinking…';thread.appendChild(pending);thread.scrollTop=thread.scrollHeight;const reply=await askRocky(q);pending.textContent=reply;input.disabled=false;send.disabled=false;input.focus();chatHistory.push({role:'user',content:q},{role:'assistant',content:reply});chatHistory=chatHistory.slice(-12);thread.scrollTop=thread.scrollHeight});
-initAuth();
+
+document.getElementById('chatForm').addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const input = document.getElementById('chatInput');
+    const q = input.value.trim();
+
+    if (!q || input.disabled) return;
+
+    const thread = document.getElementById('chatThread');
+    const send = document.getElementById('chatSubmit');
+
+    // Track the chat and account that started this request.
+    const generation = conversationGeneration;
+    const requestUserId = user?.id || null;
+
+    // Display the student's message.
+    const u = document.createElement('div');
+    u.className = 'chat-msg user';
+    u.textContent = q;
+    thread.appendChild(u);
+
+    input.value = '';
+    input.disabled = true;
+    send.disabled = true;
+
+    // Display Rocky's thinking message.
+    const pending = document.createElement('div');
+    pending.className = 'chat-msg';
+    pending.textContent = 'Rocky is thinking…';
+    thread.appendChild(pending);
+    thread.scrollTop = thread.scrollHeight;
+
+    try {
+        const reply = await askRocky(q);
+
+        // Stop if the conversation or account changed.
+        if (
+            generation !== conversationGeneration ||
+            requestUserId !== (user?.id || null)
+        ) {
+            return;
+        }
+
+        pending.textContent = reply;
+
+        chatHistory.push(
+            { role: 'user', content: q },
+            { role: 'assistant', content: reply }
+        );
+
+        chatHistory = chatHistory.slice(-12);
+        thread.scrollTop = thread.scrollHeight;
+
+        // Save the exchange for signed-in users.
+        if (requestUserId && supabaseClient) {
+            // Create a conversation if this is the first message.
+            if (!activeConversationId) {
+                const id = await createConversation();
+
+                if (!id) return;
+            }
+
+            const conversationId = activeConversationId;
+
+            // Don't save if the chat changed while creating it.
+            if (
+                generation !== conversationGeneration ||
+                requestUserId !== (user?.id || null)
+            ) {
+                return;
+            }
+
+            // Save both messages to this specific conversation.
+            const messages = [
+                { conversation_id: conversationId, role: 'user', content: q },
+                { conversation_id: conversationId, role: 'assistant', content: reply }
+            ];
+
+            const { error } = await supabaseClient
+                .from('conversation_messages')
+                .insert(messages);
+
+            if (error) {
+                console.error('Could not save chat exchange:', error);
+            }
+        }
+    } catch (error) {
+        console.error('Rocky chat error:', error);
+        if (
+            generation === conversationGeneration &&
+            requestUserId === (user?.id || null)
+        ) {
+            pending.textContent = 'Something went wrong. Please try again.';
+        }
+    } finally {
+        // Don't interfere with a newer conversation's request.
+        if (
+            generation === conversationGeneration &&
+            requestUserId === (user?.id || null)
+        ) {
+            input.disabled = false;
+            send.disabled = false;
+            input.focus();
+        }
+    }
+});
+
