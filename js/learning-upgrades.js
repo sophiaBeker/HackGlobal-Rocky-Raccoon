@@ -109,6 +109,11 @@
     catch { return fallback; }
   }
 
+  function readSessionJSON(key, fallback) {
+    try { return JSON.parse(sessionStorage.getItem(key)) || fallback; }
+    catch { return fallback; }
+  }
+
   function renderJourney() {
     const root = $("learningJourney");
     if (!root) return;
@@ -150,7 +155,7 @@
   }
 
   function renderChallenge() {
-    const saved = readJSON(dailyKey, {});
+    const saved = readSessionJSON(dailyKey, {});
     const completedToday = saved.date === dayKey && saved.challengeId === challenge.id;
     challengeRoot.innerHTML = `
       <div class="daily-heading"><div><span class="eyebrow">✦ DAILY SAFETY QUEST</span><h3>${challenge.topic}</h3></div><span class="daily-reward">⭐ 5 points</span></div>
