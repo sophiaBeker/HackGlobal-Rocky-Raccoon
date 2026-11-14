@@ -3,6 +3,7 @@ const express = require("express");
 const helmet = require("helmet");
 const path = require("path");
 const OpenAI = require("openai");
+const crypto = require("crypto");
 const { createClient } = require("@supabase/supabase-js");
 const { createModerator } = require("./lib/moderation");
 const { containsPersonalInfo } = require("./lib/privacy");
@@ -72,7 +73,10 @@ const TROUBLE_REPLY = "Rocky is having trouble connecting. Please try again.";
 // ---------------------------------------------------------------------------
 function createApp({ openai, supabase, lessons }) {
   const app = express();
-  const moderate = createModerator(openai);
+  const moderate = createModerator();
+  // NRP recommends cache_salt to isolate cached prompts between tenants.
+  const cacheSalt = process.env.NRP_CACHE_SALT || crypto.randomBytes(32).toString("base64");
+  const model = process.env.NRP_MODEL || "gpt-oss";
 
   // Behind a host's proxy (Render, Railway, Fly, ...) set TRUST_PROXY_HOPS=1 so req.ip is the
   // real visitor and not the proxy. Leave unset for local development.
@@ -166,15 +170,18 @@ function createApp({ openai, supabase, lessons }) {
       const { invalid } = await getUserFromRequest(supabase, req);
       if (invalid) return res.status(401).json({ error: "Your session has expired. Please log in again." });
 
-      // 5. `store: false` asks OpenAI not to retain the response object.
-      const response = await openai.responses.create({
-        model: process.env.OPENAI_MODEL || "gpt-4.1-mini",
-        instructions: SYSTEM_PROMPT,
-        input: [...history, { role: "user", content: message }],
-        max_output_tokens: 350,
-        store: false
+      // 5. NRP exposes the OpenAI-compatible Chat Completions API.
+      const response = await openai.chat.completions.create({
+        model,
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
+          ...history,
+          { role: "user", content: message }
+        ],
+        max_tokens: 350,
+        extra_body: { cache_salt: cacheSalt }
       });
-      const reply = (response.output_text || "").trim();
+      const reply = String(response.choices?.[0]?.message?.content || "").trim();
       if (!reply) return res.status(502).json({ error: "Rocky couldn't make a reply just now. Please try again." });
 
       // 6. Moderate Rocky's own reply before a child sees it.
@@ -233,8 +240,9 @@ function createApp({ openai, supabase, lessons }) {
   app.get("/api/health", (_req, res) => res.json({
     ok: true,
     aiConfigured: Boolean(openai),
-    aiModel: process.env.OPENAI_MODEL || "gpt-4.1-mini",
-    openaiKeyPresent: Boolean(process.env.OPENAI_API_KEY),
+    aiProvider: "NRP",
+    aiModel: model,
+    nrpKeyPresent: Boolean(process.env.NRP_API_KEY || process.env.OPENAI_API_KEY),
     authConfigured: Boolean(supabase),
     lessons: lessons.ids().length
   }));
@@ -265,8 +273,12 @@ function createApp({ openai, supabase, lessons }) {
 if (require.main === module) {
   const PORT = Number(process.env.PORT || 3000);
 
-  const openai = process.env.OPENAI_API_KEY
-    ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+  const nrpKey = process.env.NRP_API_KEY || process.env.OPENAI_API_KEY;
+  const openai = nrpKey
+    ? new OpenAI({
+        apiKey: nrpKey,
+        baseURL: process.env.NRP_BASE_URL || "https://ellm.nrp-nautilus.io/v1"
+      })
     : null;
 
   const supabase = process.env.SUPABASE_URL && process.env.SUPABASE_ANON_KEY
@@ -277,7 +289,7 @@ if (require.main === module) {
 
   createApp({ openai, supabase, lessons }).listen(PORT, () => {
     console.log(`Safety Quest running at http://localhost:${PORT} (${lessons.ids().length} lessons loaded)`);
-    if (!openai) console.log("OPENAI_API_KEY is not set; frontend will use prepared demo answers.");
+    if (!openai) console.log("NRP_API_KEY is not set; frontend will use prepared demo answers.");
   });
 }
 
