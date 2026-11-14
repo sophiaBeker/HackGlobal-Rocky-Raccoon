@@ -390,7 +390,12 @@
       const content = document.getElementById("lessonContent");
       if (!data || !content) return;
       const total = quizQuestions.length;
-      const passedMessage = score === total
+      const perfectScore = total > 0 && score === total;
+      const themeUnlockedNow = perfectScore && themeCatalog[activeLesson] && !(progress.unlockedThemes || []).includes(activeLesson);
+      if (perfectScore && themeCatalog[activeLesson]) {
+        progress.unlockedThemes = Array.from(new Set([...(progress.unlockedThemes || []), activeLesson]));
+      }
+      const passedMessage = perfectScore
         ? "Amazing work! You got every question right."
         : score >= Math.ceil(total * 0.6)
           ? "Great effort! You remembered lots of important safety ideas."
@@ -426,6 +431,7 @@
           <div class="sq-score">${score} / ${total}</div>
           <p class="sq-score-label">quiz answers correct</p>
           <div class="notice success"> ⭐ You earned ${pointsEarnedThisRun} quest points this time!</div>
+          ${perfectScore ? '<div class="notice success">🌟 '+(themeUnlockedNow?'You unlocked the '+themeCatalog[activeLesson].name+' theme! Find it in Customize.':'You earned this module’s theme! Find it in Customize.')+'</div>' : '<p class="chat-tip">Get every quiz answer correct to unlock this module’s theme.</p>'}
           <p>Remember: practice your family or school safety plan with a trusted grown-up.</p>
           <div class="lesson-actions sq-finish-actions">
             <button class="secondary" type="button" id="sqReview">Review lesson</button>
