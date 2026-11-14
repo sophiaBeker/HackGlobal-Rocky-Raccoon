@@ -99,7 +99,7 @@
   ];
 
   const dayKey = new Date().toLocaleDateString("en-CA");
-  const dailyKey = "safetyQuestDailyChallenge";
+  const dailyKey = "safetyQuestDailyChallenge"; // Per-tab: refresh-safe, but cleared in a new tab.
   const preferenceKey = "safetyQuestDisplayPreferences";
   const challenge = challenges[Math.floor(Date.now() / 86400000) % challenges.length];
   let answered = false;
@@ -202,7 +202,7 @@
     }
 
     const saved = { date: dayKey, challengeId: challenge.id };
-    try { localStorage.setItem(dailyKey, JSON.stringify(saved)); } catch {}
+    try { sessionStorage.setItem(dailyKey, JSON.stringify(saved)); } catch {}
     progress.points = Math.max(0, Number(progress.points) || 0) + 5;
     if (typeof persist === "function") persist();
     feedback.textContent = "🌟 " + challenge.why + " You earned 5 quest points!";
