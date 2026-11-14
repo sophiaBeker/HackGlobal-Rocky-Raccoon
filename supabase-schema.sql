@@ -32,3 +32,12 @@ alter table public.learner_progress
   add column if not exists active_theme text not null default 'default',
   add column if not exists flashcards_known text[] not null default '{}',
   add column if not exists flashcards_review text[] not null default '{}';
+
+
+-- Avatar shop ownership and equipped cosmetic items.
+-- Safe to run on an existing learner_progress table.
+alter table public.learner_progress
+  add column if not exists owned_avatars text[] not null default array['classic'],
+  add column if not exists active_avatar text not null default 'classic',
+  add column if not exists owned_accessories text[] not null default array['none'],
+  add column if not exists active_accessory text not null default 'none';
