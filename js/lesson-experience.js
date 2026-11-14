@@ -438,7 +438,8 @@
       if (!data || !content) return;
       const total = quizQuestions.length;
       const perfectScore = total > 0 && score === total;
-      const themeUnlockedNow = perfectScore && themeCatalog[activeLesson] && !(progress.unlockedThemes || []).includes(activeLesson);
+      const themeAlreadyUnlocked = (progress.unlockedThemes || []).includes(activeLesson);
+      const themeUnlockedNow = perfectScore && !!themeCatalog[activeLesson] && !themeAlreadyUnlocked;
       if (perfectScore && themeCatalog[activeLesson]) {
         progress.unlockedThemes = Array.from(new Set([...(progress.unlockedThemes || []), activeLesson]));
       }
@@ -469,6 +470,19 @@
         completedThisRun = true;
       }
       
+      const pointsMessage = pointsEarnedThisRun > 0
+        ? `⭐ You earned ${pointsEarnedThisRun} quest points this time!`
+        : perfectScore && themeAlreadyUnlocked
+          ? "⭐ You already earned this lesson's points on an earlier perfect attempt. Retakes let you practice, but don't award points again."
+          : "⭐ You've already earned this lesson's points. Retakes are for practice and don't award additional points.";
+      const themeMessage = perfectScore && themeUnlockedNow
+        ? `🌟 You unlocked the ${themeCatalog[activeLesson].name} theme! Find it in Customize.`
+        : perfectScore && themeAlreadyUnlocked && themeCatalog[activeLesson]
+          ? `🌟 You already unlocked the ${themeCatalog[activeLesson].name} theme in an earlier attempt. Keep practicing!`
+          : perfectScore
+            ? "🌟 Perfect score! Keep practicing what you learned."
+            : "Get every quiz answer correct to unlock this module's theme.";
+
       if (typeof persist === "function") persist();
       if (typeof updateStats === "function") updateStats();
       if (typeof renderModules === "function") renderModules();
@@ -481,8 +495,8 @@
           <p>${escapeHTML(passedMessage)}</p>
           <div class="sq-score">${score} / ${total}</div>
           <p class="sq-score-label">quiz answers correct</p>
-          <div class="notice success"> ⭐ You earned ${pointsEarnedThisRun} quest points this time!</div>
-          ${perfectScore ? '<div class="notice success">🌟 '+(themeUnlockedNow?'You unlocked the '+themeCatalog[activeLesson].name+' theme! Find it in Customize.':'You earned this module’s theme! Find it in Customize.')+'</div>' : '<p class="chat-tip">Get every quiz answer correct to unlock this module’s theme.</p>'}
+          <div class="notice success">${escapeHTML(pointsMessage)}</div>
+          ${perfectScore ? `<div class="notice success">${escapeHTML(themeMessage)}</div>` : `<p class="chat-tip">${escapeHTML(themeMessage)}</p>`}
           <p>Remember: practice your family or school safety plan with a trusted grown-up.</p>
           <div class="lesson-actions sq-finish-actions">
             <button class="secondary" type="button" id="sqReview">Review lesson</button>
