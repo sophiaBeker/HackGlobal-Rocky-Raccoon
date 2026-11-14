@@ -115,7 +115,7 @@ module.exports = function registerExplain(app, { openai, supabase, rateLimit, le
           { role: "user", content: buildInput(v) }
         ],
         max_tokens: 220,
-        cache_salt: CACHE_SALT
+        extra_body: { cache_salt: CACHE_SALT }
       });
 
       const reply = String(response.choices?.[0]?.message?.content || "").trim().slice(0, 900);
