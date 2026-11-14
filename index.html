@@ -73,7 +73,7 @@
         <span class="eyebrow">✦ Your next adventure</span>
         <h2>Big skills for little heroes.</h2>
         <p>Learn what to do in an emergency with friendly lessons and quick challenges made just for you.</p>
-        <button class="btn" onclick="openLesson('earthquake')">Start guest lesson →</button>
+        <button class="btn" id="heroCta" onclick="openLesson('earthquake')">Start guest lesson →</button>
       </div>
       <div class="hero-art" aria-hidden="true">🦝</div>
     </div>
@@ -118,8 +118,8 @@
 
     <div class="module-grid" id="homeModules"></div>
 
-    <div class="bottom-grid">
-      <div class="panel">
+    <div class="bottom-grid" id="homeBottomGrid">
+      <div class="panel" id="guestLearningPanel">
         <h3>Guest learning</h3>
         <p class="desc">Try the earthquake lesson without creating an account. Your guest progress stays on this browser.</p>
         <button class="btn" onclick="openLesson('earthquake')">Continue lesson →</button>
@@ -328,7 +328,7 @@
 <script src="js/profile.js"></script>
 
 <!-- Visual and usability polish (keep last) -->
-<script src="js/polish.js?v=20261114a"></script>
+<script src="js/polish.js?v=20261114c"></script>
 <script src="js/learning-upgrades.js"></script>
 
 </body>

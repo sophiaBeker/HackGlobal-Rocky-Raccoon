@@ -9,6 +9,7 @@
  *  - "Read aloud" button in lessons and quizzes
  *  - Daily practice streak (stored in this browser only)
  *  - Focus management for keyboard and screen-reader users
+ *  - Home page removes guest-only content while the learner is signed in
  */
 (() => {
   "use strict";
@@ -209,6 +210,46 @@
   };
 
   /* ------------------------------------------------------------------ */
+  /* Home page: remove guest-only content while signed in                */
+  /* ------------------------------------------------------------------ */
+  // Falls back to structural selectors so this works even if the ids are missing.
+  const heroCta = $("#heroCta") || $("#page-home .hero-copy .btn");
+  const guestPanel = $("#guestLearningPanel") || $("#page-home .bottom-grid .panel:first-child");
+  const homeGrid = $("#homeBottomGrid") || $("#page-home .bottom-grid");
+
+  // Comment markers remember where each element lives so it can be restored on logout.
+  const heroMark = document.createComment("hero-cta");
+  const panelMark = document.createComment("guest-panel");
+  if (heroCta && heroCta.parentNode) heroCta.after(heroMark);
+  if (guestPanel && guestPanel.parentNode) guestPanel.after(panelMark);
+
+  function setGuestHome(signedIn) {
+    if (signedIn) {
+      if (heroCta && heroCta.isConnected) heroCta.remove();
+      if (guestPanel && guestPanel.isConnected) guestPanel.remove();
+      if (homeGrid) homeGrid.style.gridTemplateColumns = "1fr";
+    } else {
+      if (heroCta && !heroCta.isConnected) heroMark.before(heroCta);
+      if (guestPanel && !guestPanel.isConnected) panelMark.before(guestPanel);
+      if (homeGrid) homeGrid.style.gridTemplateColumns = "";
+    }
+  }
+
+  // Drive it from Supabase auth events (fires for the restored session, log in and log out).
+  if (typeof supabaseClient !== "undefined" && supabaseClient) {
+    supabaseClient.auth.onAuthStateChange((_event, newSession) => setGuestHome(!!newSession));
+    supabaseClient.auth.getSession().then(({ data }) => setGuestHome(!!data.session)).catch(() => {});
+  }
+
+  // Safety net: also re-check whenever the app refreshes its stats.
+  const baseUpdateStatsForGuestHome = window.updateStats;
+  window.updateStats = function updateStatsGuestHome() {
+    const result = baseUpdateStatsForGuestHome.apply(this, arguments);
+    setGuestHome(!!user);
+    return result;
+  };
+
+  /* ------------------------------------------------------------------ */
   /* Read aloud                                                          */
   /* ------------------------------------------------------------------ */
   const canSpeak = "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
@@ -343,4 +384,5 @@
   paintRocky();
   decorateModules();
   window.renderThemes();
+  setGuestHome(!!user);
 })();
