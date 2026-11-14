@@ -24,3 +24,11 @@ drop policy if exists "Learners can update their own progress" on public.learner
 create policy "Learners can update their own progress"
   on public.learner_progress for update
   to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- Additions for module theme rewards and flashcard study progress.
+-- Safe to run on an existing learner_progress table.
+alter table public.learner_progress
+  add column if not exists unlocked_themes text[] not null default '{}',
+  add column if not exists active_theme text not null default 'default',
+  add column if not exists flashcards_known text[] not null default '{}',
+  add column if not exists flashcards_review text[] not null default '{}';
