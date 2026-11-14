@@ -967,8 +967,21 @@ footer {
 .raccoon-head{fill:var(--fur)}
 .raccoon-ears{fill:var(--fur);stroke:#454b4a;stroke-width:3;stroke-linejoin:round}
 .raccoon-mask{fill:#454b4a}
-.raccoon-accessory{position:absolute;top:-12%;right:-15%;font-size:30px;filter:drop-shadow(0 2px 1px #0002);line-height:1}
-.raccoon-art.small .raccoon-accessory{font-size:14px;top:-10%;right:-16%}
+.raccoon-accessory{position:absolute;z-index:2;display:block;filter:drop-shadow(0 2px 1px #0002);line-height:1;pointer-events:none}
+.raccoon-art .raccoon-accessory{font-size:30px;top:-13%;left:50%;right:auto;transform:translateX(-50%)}
+.raccoon-art.accessory-bow .raccoon-accessory{top:8%;left:75%;font-size:25px;transform:translateX(-50%) rotate(12deg)}
+.raccoon-art.accessory-crown .raccoon-accessory{top:-18%;left:50%;font-size:29px;transform:translateX(-50%)}
+.raccoon-art.accessory-glasses .raccoon-accessory{top:27%;left:50%;font-size:31px;transform:translateX(-50%)}
+.raccoon-art.accessory-explorer .raccoon-accessory{top:-16%;left:50%;font-size:32px;transform:translateX(-50%)}
+.raccoon-art.accessory-star .raccoon-accessory{top:8%;left:78%;font-size:24px;transform:translateX(-50%)}
+.raccoon-art.accessory-scarf .raccoon-accessory{top:64%;left:50%;font-size:31px;transform:translateX(-50%)}
+.raccoon-art.small .raccoon-accessory{font-size:14px}
+.raccoon-art.small.accessory-bow .raccoon-accessory{font-size:12px}
+.raccoon-art.small.accessory-crown .raccoon-accessory{font-size:14px}
+.raccoon-art.small.accessory-glasses .raccoon-accessory{font-size:15px}
+.raccoon-art.small.accessory-explorer .raccoon-accessory{font-size:15px}
+.raccoon-art.small.accessory-star .raccoon-accessory{font-size:12px}
+.raccoon-art.small.accessory-scarf .raccoon-accessory{font-size:15px}
 .profile .avatar{background:transparent;width:38px;height:38px}
 @media(max-width:850px){.shop-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:480px){.shop-grid{grid-template-columns:1fr 1fr}.shop-item{padding:10px}.shop-wallet{padding:13px}}
