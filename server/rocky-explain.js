@@ -105,15 +105,19 @@ module.exports = function registerExplain(app, { openai, supabase, rateLimit, le
         return res.status(401).json({ error: "Please log in to use Rocky with this lesson." });
       }
 
-      const response = await openai.responses.create({
-        model: process.env.OPENAI_MODEL || "gpt-4.1-mini",
-        instructions: EXPLAIN_PROMPT,
-        input: buildInput(v),
-        max_output_tokens: 220,
-        store: false
+      const response = await openai.chat.completions.create({
+        model: process.env.NRP_MODEL || "gpt-oss",
+        messages: [
+          { role: "system", content: EXPLAIN_PROMPT },
+          { role: "user", content: buildInput(v) }
+        ],
+        max_tokens: 220,
+        extra_body: {
+          cache_salt: process.env.NRP_CACHE_SALT || require("crypto").randomBytes(32).toString("base64")
+        }
       });
 
-      const reply = (response.output_text || "").trim().slice(0, 900);
+      const reply = String(response.choices?.[0]?.message?.content || "").trim().slice(0, 900);
       if (!reply) return res.status(502).json({ error: "Rocky couldn't make a reply just now." });
 
       const check = await moderate(reply);
@@ -124,7 +128,12 @@ module.exports = function registerExplain(app, { openai, supabase, rateLimit, le
 
       res.json({ reply });
     } catch (err) {
-      console.error("Rocky explain error:", err.message);
+      console.error("Rocky explain error:", {
+        status: err.status || err.statusCode || null,
+        code: err.code || null,
+        type: err.type || null,
+        requestId: err.request_id || err.headers?.["x-request-id"] || null
+      });
       res.status(500).json({ error: "Rocky is having trouble connecting. Please try again." });
     }
   });
