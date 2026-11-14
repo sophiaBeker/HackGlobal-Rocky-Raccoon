@@ -112,9 +112,7 @@ module.exports = function registerExplain(app, { openai, supabase, rateLimit, le
           { role: "user", content: buildInput(v) }
         ],
         max_tokens: 220,
-        extra_body: {
-          cache_salt: process.env.NRP_CACHE_SALT || require("crypto").randomBytes(32).toString("base64")
-        }
+        cache_salt: process.env.NRP_CACHE_SALT || require("crypto").randomBytes(32).toString("base64")
       });
 
       const reply = String(response.choices?.[0]?.message?.content || "").trim().slice(0, 900);
