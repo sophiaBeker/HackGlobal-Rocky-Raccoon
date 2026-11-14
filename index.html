@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="css/lesson-experience.css">
 <link rel="stylesheet" href="css/flashcards.css">
+<link rel="stylesheet" href="css/profile.css"><!-- NEW -->
 <link rel="stylesheet" href="css/polish.css">
 </head>
 
@@ -36,6 +37,7 @@
       <button data-page="rocky">💬 <span class="nav-text">Ask Rocky</span></button>
       <button data-page="customize">🎨 <span class="nav-text">Customize</span></button>
       <button data-page="shop">🛍️ <span class="nav-text">Rocky’s Shop</span></button>
+      <button data-page="profile">🙋 <span class="nav-text">Profile</span></button><!-- NEW -->
       <button data-page="account">👤 <span class="nav-text">Account</span></button>
     </nav>
   </div>
@@ -227,6 +229,15 @@
     </div>
   </section>
 
+  <!-- NEW: Profile page (content is rendered by js/profile.js) -->
+  <section id="page-profile" class="page">
+    <div class="profile-page">
+      <h1 class="hello">My profile</h1>
+      <p class="sub">See your info, update your settings, or delete your account.</p>
+      <div id="profileContent"></div>
+    </div>
+  </section>
+
   <section id="page-account" class="page">
     <h1 class="hello">Your account </h1>
     <p class="sub">Save your learning progress by creating an account, or keep exploring as a guest.</p>
@@ -251,6 +262,7 @@
 <div id="moreSheet" class="more-sheet" hidden>
   <button data-page="customize"><span aria-hidden="true">🎨</span>Customize</button>
   <button data-page="shop"><span aria-hidden="true">🛍️</span>Shop</button>
+  <button data-page="profile"><span aria-hidden="true">🙋</span>Profile</button><!-- NEW -->
   <button data-page="account"><span aria-hidden="true">👤</span>Account</button>
 </div>
 
@@ -271,6 +283,9 @@
 <script src="js/lesson-experience.js"></script>
 <script src="js/rocky-why.js"></script>
 <script src="js/flashcards.js"></script>
+
+<!-- NEW: profile page (after flashcards.js, before polish.js) -->
+<script src="js/profile.js"></script>
 
 <!-- Visual and usability polish (keep last) -->
 <script src="js/polish.js"></script>
