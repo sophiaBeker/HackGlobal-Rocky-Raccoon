@@ -189,7 +189,7 @@ function createApp({ openai, supabase, lessons }) {
     } catch (err) {
       // Log actionable provider diagnostics without logging prompts, credentials, or response content.
       console.error("Rocky chat error:", {
-        message: err.message,
+        // Do not log provider error messages; they may include a masked credential fragment.
         status: err.status || err.statusCode || null,
         code: err.code || null,
         type: err.type || null,
