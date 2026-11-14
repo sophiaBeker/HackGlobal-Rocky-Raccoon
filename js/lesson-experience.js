@@ -119,7 +119,14 @@
         }));
 
       (extraQuestions[activeLesson] || []).forEach(question => questions.push(question));
-      return questions.slice(0, 5);
+
+      // Keep the same five questions, but present them in a different order each run.
+      const quiz = questions.slice(0, 5);
+      for (let i = quiz.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [quiz[i], quiz[j]] = [quiz[j], quiz[i]];
+      }
+      return quiz;
     }
   
     function progressDots(total, current, completed) {
