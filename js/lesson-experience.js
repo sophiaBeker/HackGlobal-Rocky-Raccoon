@@ -102,6 +102,9 @@
       }
     };
   
+    const previousAnswerOrders = new Map();
+    const previousCorrectPositions = new Map();
+
     function makeQuiz(data) {
       const questions = (data.sections || [])
         .map((section, index) => ({ section, index }))
@@ -122,11 +125,28 @@
 
       // Preserve the lesson's teaching sequence; shuffle only answer positions.
       return questions.slice(0, 5).map(question => {
+        const key = question.question;
         const order = question.answers.map((_, index) => index);
+        const previousOrder = previousAnswerOrders.get(key);
+        const previousCorrectPosition = previousCorrectPositions.get(key);
+
+        // Fisher-Yates shuffle, then ensure both the full order and correct-answer
+        // position change from the previous attempt whenever multiple choices allow it.
         for (let i = order.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [order[i], order[j]] = [order[j], order[i]];
         }
+        if (order.length > 1 && previousCorrectPosition !== undefined &&
+            order.indexOf(question.correct) === previousCorrectPosition) {
+          const current = order.indexOf(question.correct);
+          const replacement = (current + 1 + Math.floor(Math.random() * (order.length - 1))) % order.length;
+          [order[current], order[replacement]] = [order[replacement], order[current]];
+        }
+        if (order.length > 1 && previousOrder && order.every((value, index) => value === previousOrder[index])) {
+          [order[0], order[1]] = [order[1], order[0]];
+        }
+        previousAnswerOrders.set(key, order.slice());
+        previousCorrectPositions.set(key, order.indexOf(question.correct));
 
         const shuffledWrongWhy = {};
         order.forEach((originalIndex, shuffledIndex) => {
@@ -382,8 +402,10 @@
           if (selectedIndex === question.correct) {
             if (firstAttemptCorrect) {
               score++;
-              // Hold quiz rewards until the lesson finishes so they can be granted once. 
-              pointsEarnedThisRun += 5;
+              // Only an uncompleted lesson can earn quiz points; retries never pay again.
+              if (!progress.completed.includes(activeLesson) && !completedThisRun) {
+                pointsEarnedThisRun += 5;
+              }
             }
           } else {
             wrongAttempts++;
