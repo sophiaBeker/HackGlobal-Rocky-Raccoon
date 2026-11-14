@@ -21,6 +21,9 @@
 
 const { getUserFromRequest } = require("./lib/auth");
 
+// One salt per server start (or NRP_CACHE_SALT). A new random value per request would defeat prompt caching.
+const CACHE_SALT = process.env.NRP_CACHE_SALT || require("crypto").randomBytes(32).toString("base64");
+
 const EXPLAIN_PROMPT = `You are Rocky Raccoon, a friendly, calm safety helper for children in kindergarten through grade 5.
 A learner just picked an answer that is NOT the safest choice in a safety lesson quiz. Help them understand why.
 
@@ -112,7 +115,7 @@ module.exports = function registerExplain(app, { openai, supabase, rateLimit, le
           { role: "user", content: buildInput(v) }
         ],
         max_tokens: 220,
-        cache_salt: process.env.NRP_CACHE_SALT || require("crypto").randomBytes(32).toString("base64")
+        cache_salt: CACHE_SALT
       });
 
       const reply = String(response.choices?.[0]?.message?.content || "").trim().slice(0, 900);

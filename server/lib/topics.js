@@ -8,6 +8,8 @@
  *   short follow-up AND a recent user message was on topic. The client's history can
  *   be forged, so this only unlocks short follow-up phrases, never arbitrary questions.
  *   The system prompt and moderation still apply to everything.
+ *
+ * Keep the topic list in sync with the "You teach..." line of SYSTEM_PROMPT in server.js.
  */
 
 const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -26,6 +28,7 @@ const WORDS = [
   "fire", "fires", "smoke", "lighter", "lighters", "matches", "stop drop roll",
   // weather / floods
   "rain", "storm", "storms", "floodwater", "flood water", "drinking water",
+  "weather", "heat", "heatwave", "heat wave", "heatstroke", "heat stroke", "extreme heat",
   // power outages
   "power outage", "power cut", "power line", "power lines", "power goes out", "electric", "electricity",
   "radio", "candle", "candles",
@@ -39,7 +42,10 @@ const WORDS = [
 const STEMS = [
   "earthquake", "aftershock", "shak", "prepar", "evacuat", "shelter", "flood",
   "blackout", "outage", "flashlight", "batter", "injur", "firefight", "responder",
-  "burn", "frighten", "worri"
+  "burn", "frighten", "worri",
+  // wildfires and other hazards children learn about in California and elsewhere
+  "wildfire", "tornado", "hurricane", "tsunami", "landslide", "mudslide", "lockdown",
+  "thunder", "lightning", "blizzard", "typhoon", "cyclone"
 ];
 
 const WORD_RE = new RegExp(`\\b(?:${WORDS.map(phrase).join("|")})\\b`, "i");

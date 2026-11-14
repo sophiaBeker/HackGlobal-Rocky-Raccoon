@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const helmet = require("helmet");
+const compression = require("compression");
 const path = require("path");
 const OpenAI = require("openai");
 const crypto = require("crypto");
@@ -48,7 +49,7 @@ function createRateLimiter({ max, windowMs = 60_000 }) {
 // ---------------------------------------------------------------------------
 const SYSTEM_PROMPT = `You are Rocky Raccoon, a friendly, calm educational helper for children in kindergarten through grade 5.
 Use short, clear, age-appropriate language. Be kind, reassuring, and never shame a learner.
-You teach general emergency-preparedness concepts: earthquake safety, fire safety, flood safety, power outages (blackouts), school drills, shelter-in-place, emergency kits and go-bags, basic first-aid awareness, calling first responders, and asking trusted adults for help.
+You teach general emergency-preparedness concepts: earthquake safety, fire safety, flood safety, wildfire and smoke safety, severe weather (tornadoes, hurricanes, tsunamis, thunderstorms, extreme heat), power outages (blackouts), school drills (if asked about a lockdown drill, say calmly that it is a practice for staying safe, that the child should follow their teacher, and never describe attackers, weapons, or violence), shelter-in-place, emergency kits and go-bags, basic first-aid awareness, calling first responders, and asking trusted adults for help.
 Prioritize these rules:
 - In a real emergency, tell the child to follow their teacher, caregiver, local emergency officials, and established school/family plans.
 - Never encourage a child to approach danger, investigate smoke/fire, re-enter a dangerous building, go near or play in floodwater, touch fallen power lines or electrical equipment, or ignore adult directions.
@@ -115,13 +116,20 @@ function createApp({ openai, supabase, lessons }) {
     }
   }));
 
+  // Compress text responses (HTML, CSS, JS, JSON). Much smaller downloads on school Wi-Fi.
+  app.use(compression());
+
   // 32kb leaves room for 10 history messages of 800 characters, even with emoji/accents.
   app.use(express.json({ limit: "32kb" }));
 
+  // Cache CSS/JS for an hour in production (ETags still let browsers revalidate cheaply).
+  // Shorten or remove this while you are changing files a lot.
+  const STATIC_OPTIONS = { maxAge: process.env.NODE_ENV === "production" ? "1h" : 0 };
+
   // Static files: serve ONLY the browser-facing files, not the whole repo.
   // If you add an images/ or fonts/ folder, add a matching app.use line.
-  app.use("/css", express.static(path.join(ROOT, "css")));
-  app.use("/js", express.static(path.join(ROOT, "js")));
+  app.use("/css", express.static(path.join(ROOT, "css"), STATIC_OPTIONS));
+  app.use("/js", express.static(path.join(ROOT, "js"), STATIC_OPTIONS));
   app.get("/config.js", (_req, res) => res.sendFile(path.join(ROOT, "config.js")));
   app.get(["/", "/index.html"], (_req, res) => res.sendFile(path.join(ROOT, "index.html")));
 
