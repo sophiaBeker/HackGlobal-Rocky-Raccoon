@@ -90,7 +90,7 @@ function renderShop(){
     const owned=ownedAvatars.includes(key);
     return '<article class="shop-item"><div class="shop-item-art">'+raccoonMarkup(key,'none','large')+'</div><strong>'+item.name+'</strong><p>'+item.description+'</p><small>'+(owned?'Already owned':'⭐ '+item.price+' points')+'</small><button class="secondary" type="button" onclick="showShopDetails(\'avatar\',\''+key+'\')">View details</button><button class="'+(owned?'secondary':'btn')+'" type="button" '+(owned?'disabled':'')+' onclick="buyAvatar(\''+key+'\')">'+(owned?'Owned':'Buy · '+item.price)+'</button></article>';
   }).join('');
-  if(accessoryEl)accessoryEl.innerHTML=Object.entries(accessoryCatalog).filter(([key])=>key!=='none').map(([key,item])=>{
+  if(accessoryEl)accessoryEl.innerHTML=Object.entries(accessoryCatalog).filter(([key])=>key!=='none').sort(([,a],[,b])=>a.price-b.price).map(([key,item])=>{
     const owned=ownedAccessories.includes(key);
     return '<article class="shop-item"><div class="shop-item-art accessory-art">'+item.emoji+'</div><strong>'+item.name+'</strong><p>'+item.description+'</p><small>'+(owned?'Already owned':'⭐ '+item.price+' points')+'</small><button class="secondary" type="button" onclick="showShopDetails(\'accessory\',\''+key+'\')">View details</button><button class="'+(owned?'secondary':'btn')+'" type="button" '+(owned?'disabled':'')+' onclick="buyAccessory(\''+key+'\')">'+(owned?'Owned':'Buy · '+item.price)+'</button></article>';
   }).join('');
