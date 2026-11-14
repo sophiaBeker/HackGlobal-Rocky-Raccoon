@@ -382,7 +382,7 @@
           if (selectedIndex === question.correct) {
             if (firstAttemptCorrect) {
               score++;
-              progress.points = (progress.points || 0) + 5;
+              // Hold quiz rewards until the lesson finishes so they can be granted once. 
               pointsEarnedThisRun += 5;
             }
           } else {
@@ -436,8 +436,12 @@
       
         if (!alreadyCompleted) {
           progress.completed.push(activeLesson);
-          progress.points = (progress.points || 0) + 20;
+          // Award the first-run quiz points and lesson completion bonus together.
           pointsEarnedThisRun += 20;
+          progress.points = (progress.points || 0) + pointsEarnedThisRun;
+        } else {
+          // Retakes remain available, but completed lessons cannot award points again.
+          pointsEarnedThisRun = 0;
         }
       
         completedThisRun = true;
