@@ -246,8 +246,7 @@
       button.textContent = "⏹ Stop reading";
       button.setAttribute("aria-pressed", "true");
     });
-    const kicker = $(".sq-reading-kicker", panel);
-    if (kicker) kicker.after(button); else panel.prepend(button);
+    panel.append(button);
   }
 
   /* ------------------------------------------------------------------ */
