@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="css/flashcards.css">
 <link rel="stylesheet" href="css/profile.css"><!-- NEW -->
 <link rel="stylesheet" href="css/polish.css">
+<link rel="stylesheet" href="css/learning-upgrades.css">
 </head>
 
 <body>
@@ -89,6 +90,23 @@
       <div class="stat"><div class="stat-icon">⭐</div><div><small>Quest points</small><strong id="pointsStat">0</strong></div></div>
       <div class="stat"><div class="stat-icon">🎯</div><div><small>Quiz attempts</small><strong id="quizzesDone">0</strong></div></div>
     </div>
+
+    <section class="panel learning-hub" aria-labelledby="learningHubTitle">
+      <div class="section-head">
+        <div>
+          <h2 id="learningHubTitle">Your learning journey</h2>
+          <p>See your progress, earn achievements, and try a quick daily challenge.</p>
+        </div>
+      </div>
+      <div id="learningJourney"></div>
+      <div class="daily-challenge" id="dailyChallenge" aria-live="polite"></div>
+      <div class="achievement-shelf" id="achievementShelf"></div>
+      <div class="accessibility-tools" aria-label="Display preferences">
+        <strong>Make learning comfortable</strong>
+        <button type="button" class="secondary" id="largeTextToggle" aria-pressed="false">A+ Larger text</button>
+        <button type="button" class="secondary" id="reducedMotionToggle" aria-pressed="false">◌ Reduce motion</button>
+      </div>
+    </section>
 
     <div class="section-head">
       <div>
@@ -311,6 +329,7 @@
 
 <!-- Visual and usability polish (keep last) -->
 <script src="js/polish.js"></script>
+<script src="js/learning-upgrades.js"></script>
 
 </body>
 </html>
