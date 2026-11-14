@@ -31,8 +31,9 @@
       <button class="active" data-page="home">⌂ <span class="nav-text">Home</span></button>
       <button data-page="explore">✦ <span class="nav-text">Lessons</span></button>
       <button data-page="flashcards">🗂️ <span class="nav-text">Flashcards</span></button>
-      <button data-page="shop">🛍️ <span class="nav-text">Rocky’s Shop</span></button>
       <button data-page="rocky">💬 <span class="nav-text">Ask Rocky</span></button>
+      <button data-page="customize">🎨 <span class="nav-text">Customize</span></button>
+      <button data-page="shop">🛍️ <span class="nav-text">Rocky’s Shop</span></button>
       <button data-page="account">👤 <span class="nav-text">Account</span></button>
     </nav>
   </div>
@@ -85,10 +86,7 @@
       <div class="stat"><div class="stat-icon">🎯</div><div><small>Quiz attempts</small><strong id="quizzesDone">0</strong></div></div>
     </div>
 
-    <div class="panel theme-panel">
-      <div class="section-head"><div><h2>Your theme collection</h2><p>Earn a special look by getting every question right in a module.</p></div><strong id="themeUnlockCount">0 / 6 unlocked</strong></div>
-      <div id="themeCollection" class="theme-grid"></div>
-    </div>
+
 
     <div class="section-head">
       <div>
@@ -172,6 +170,22 @@
       <div class="section-head shop-section-head"><div><h2>Accessories</h2><p>Give Rocky a little extra personality.</p></div></div>
       <div id="accessoryShop" class="shop-grid"></div>
       <p id="shopMessage" class="shop-message" role="status" aria-live="polite">Pick an item to see its details.</p>
+    </div>
+  </section>
+
+  <section id="page-customize" class="page">
+    <div class="shop-page">
+      <h1 class="hello">Make Rocky yours!</h1>
+      <p class="sub">Choose from the avatars, accessories, and themes you have already unlocked or purchased.</p>
+      <div class="shop-wallet panel"><div><span class="shop-wallet-label">Your current look</span><strong>Rocky the Raccoon</strong></div><div id="customizeAvatarPreview" class="shop-avatar-preview" aria-label="Your current Rocky avatar"></div></div>
+      <div class="section-head"><div><h2>Your raccoon avatars</h2><p>Only avatars you own can be selected here.</p></div></div>
+      <div id="ownedAvatarChoices" class="shop-grid"></div>
+      <div class="section-head shop-section-head"><div><h2>Your accessories</h2><p>Mix and match accessories you have purchased.</p></div></div>
+      <div id="ownedAccessoryChoices" class="shop-grid"></div>
+          <div class="panel theme-panel">
+      <div class="section-head"><div><h2>Your themes</h2><p>Themes are unlocked by earning a perfect score in a module quiz.</p></div><strong id="themeUnlockCount">0 / 6 unlocked</strong></div>
+      <div id="themeCollection" class="theme-grid"></div>
+    </div>
     </div>
   </section>
 
