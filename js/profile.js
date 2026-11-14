@@ -22,7 +22,8 @@
   const NICKNAME_RE = /^[A-Za-z0-9 _-]{3,20}$/; // same rule as sign-up in app.js
   const DELETE_ENDPOINT = (typeof CONFIG !== "undefined" && CONFIG.deleteAccountEndpoint) || "/api/account/delete";
 
-  let pendingNotice = null; // shown once on the next render, e.g. after deletion
+  // Shown on the profile page until the learner leaves it (e.g. after deletion).
+  let pendingNotice = null;
   let deleting = false;
 
   /* ------------------------------------------------------------------ */
@@ -211,10 +212,11 @@
   }
 
   function renderProfile() {
-    const notice = pendingNotice;
-    pendingNotice = null;
-    const noticeHtml = notice
-      ? `<div class="notice ${notice.kind === "ok" ? "success" : ""}" role="status">${escapeHtml(notice.text)}</div>`
+    // The notice is NOT cleared here: logout() triggers a re-render before the
+    // final showPage("profile"), and clearing it early would lose the message.
+    // It is cleared in showPageWithProfile when the learner navigates away.
+    const noticeHtml = pendingNotice
+      ? `<div class="notice ${pendingNotice.kind === "ok" ? "success" : ""}" role="status">${escapeHtml(pendingNotice.text)}</div>`
       : "";
     root.innerHTML = noticeHtml + (user ? signedInHtml() : guestHtml());
     if (user) loadChatCount();
@@ -349,13 +351,16 @@
       if (!res.ok) throw new Error(body.error || "Something went wrong. Your account was not deleted.");
 
       // The account is gone. Clear the local session and return to guest mode.
+      // `deleting` stays true during logout() so renderAccount() doesn't re-render
+      // the profile page while the account is being torn down.
+      try { await supabaseClient.auth.signOut({ scope: "local" }); } catch { /* session is already invalid */ }
+      await logout();       // resets progress, theme, chat state and shows Home
+
       pendingNotice = {
         kind: "ok",
         text: "Your account and everything saved with it have been permanently deleted. Goodbye, Explorer!"
       };
-      try { await supabaseClient.auth.signOut({ scope: "local" }); } catch { /* session is already invalid */ }
       deleting = false;
-      await logout();       // resets progress, theme, chat state and shows Home
       showPage("profile");  // shows the guest view with the confirmation notice
     } catch (e) {
       const offline = e instanceof TypeError; // fetch network failure
@@ -427,6 +432,8 @@
   /* ------------------------------------------------------------------ */
   const baseShowPage = window.showPage;
   window.showPage = function showPageWithProfile(name) {
+    // Leaving the profile page dismisses the one-time notice.
+    if (name !== "profile") pendingNotice = null;
     const result = baseShowPage.apply(this, arguments);
     if (name === "profile") {
       const crumb = $("crumbPage");
