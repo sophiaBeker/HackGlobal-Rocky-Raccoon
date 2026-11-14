@@ -136,6 +136,10 @@ function createApp({ openai, supabase, lessons }) {
   const chatLimiter = createRateLimiter({ max: Number(process.env.CHAT_RATE_LIMIT || 30) });
   const explainLimiter = createRateLimiter({ max: Number(process.env.EXPLAIN_RATE_LIMIT || 30) });
   const lessonLimiter = createRateLimiter({ max: Number(process.env.LESSON_RATE_LIMIT || 120) });
+  const accountDeleteLimiter = createRateLimiter({ max: Number(process.env.ACCOUNT_DELETE_RATE_LIMIT || 5) });
+
+  // Permanently delete a learner account only after server-side password re-verification.
+  require("./account")(app, { supabase, rateLimit: accountDeleteLimiter });
 
   // -------------------------------------------------------------------------
   // Rocky chat
