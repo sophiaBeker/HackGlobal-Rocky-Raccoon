@@ -32,12 +32,12 @@ help:{title:'How to Get Help',icon:'🤝',intro:'You never need to handle an eme
 const guestKey='safetyQuestGuestProgressV2';
 
 const themeCatalog={
-  earthquake:{name:'Earthquake Calm',emoji:'🌎',vars:{'--ink':'#263b59','--muted':'#53677f','--green':'#416b91','--green2':'#dceaf6','--lime':'#c9e5f4','--cream':'#f1f6fb','--card':'#ffffff','--orange':'#e8b36e','--line':'#dce5ee'}},
-  fire:{name:'Fire Ready',emoji:'🔥',vars:{'--ink':'#63352c','--muted':'#79554b','--green':'#a34e36','--green2':'#f8dfd1','--lime':'#f7c5a2','--cream':'#fff5ed','--card':'#fffdfa','--orange':'#ed9856','--line':'#f0ddd1'}},
-  drill:{name:'School Smart',emoji:'🚨',vars:{'--ink':'#303b65','--muted':'#586487','--green':'#4e639b','--green2':'#e2e8fa','--lime':'#d2dcff','--cream':'#f4f5fc','--card':'#ffffff','--orange':'#e6ad63','--line':'#e0e4f2'}},
-  shelter:{name:'Cozy Shelter',emoji:'🏠',vars:{'--ink':'#385044','--muted':'#617567','--green':'#527b61','--green2':'#e2eee3','--lime':'#d2e7ce','--cream':'#f3f7ef','--card':'#fffefa','--orange':'#d9a56c','--line':'#dfe9dc'}},
-  kit:{name:'Ready Kit',emoji:'🎒',vars:{'--ink':'#66502d','--muted':'#7b6948','--green':'#8b7139','--green2':'#f2e9c9','--lime':'#e9dda4','--cream':'#fbf7e9','--card':'#fffefa','--orange':'#d99a4c','--line':'#eee4c9'}},
-  help:{name:'Helping Hands',emoji:'🤝',vars:{'--ink':'#4b3d63','--muted':'#6d6080','--green':'#79629b','--green2':'#ece4f5','--lime':'#dfd0ef','--cream':'#f8f4fb','--card':'#fffefe','--orange':'#dda36d','--line':'#e9e0ef'}}
+  earthquake:{name:'Earth & Stone',emoji:'🌎',vars:{'--ink':'#493729','--muted':'#75614e','--green':'#8a6243','--green2':'#eadbc9','--lime':'#d7bd9d','--cream':'#f7f0e7','--card':'#fffdf9','--orange':'#bd8651','--line':'#e7d9c8'}},
+  fire:{name:'Ember & Flame',emoji:'🔥',vars:{'--ink':'#642f29','--muted':'#87534a','--green':'#b44835','--green2':'#f4d8cf','--lime':'#f2b8a5','--cream':'#fff1eb','--card':'#fffdfa','--orange':'#e17a45','--line':'#efd5cb'}},
+  flood:{name:'Tidal Blue',emoji:'🌊',vars:{'--ink':'#173f61','--muted':'#52748b','--green':'#287da2','--green2':'#d7edf5','--lime':'#b9e1ed','--cream':'#eff8fb','--card':'#ffffff','--orange':'#e6b86c','--line':'#d2e6ee'}},
+  kit:{name:'Ready & Rooted',emoji:'🎒',vars:{'--ink':'#43513a','--muted':'#68765a','--green':'#758b4c','--green2':'#e5ebd6','--lime':'#d6e0b8','--cream':'#f5f7ed','--card':'#fffefa','--orange':'#c99a58','--line':'#e0e7d4'}},
+  help:{name:'First Responder',emoji:'🚑',vars:{'--ink':'#3e3b5c','--muted':'#686582','--green':'#596f9d','--green2':'#e2e8f4','--lime':'#cbd7ee','--cream':'#f5f6fb','--card':'#ffffff','--orange':'#d9a45d','--line':'#e0e4ef'}},
+  blackout:{name:'Midnight & Silver',emoji:'🔦',vars:{'--ink':'#343b46','--muted':'#626d7b','--green':'#657487','--green2':'#e1e5ea','--lime':'#cbd2da','--cream':'#f2f4f6','--card':'#ffffff','--orange':'#e1b65f','--line':'#dce1e7'}}
 };
 const avatarCatalog={
   classic:{name:'Classic Rocky',color:'#92999b',price:0,description:'Rocky’s familiar gray fur.'},
