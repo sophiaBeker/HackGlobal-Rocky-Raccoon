@@ -160,6 +160,22 @@ const prepared=[
 function preparedAnswer(q){const t=q.toLowerCase();for(const x of prepared)if(x.keys.some(k=>t.includes(k)))return x.answer;return 'That is a good question, Explorer! I can help with earthquake safety, fire safety, school drills, sheltering in place, emergency kits, and getting help. Try asking about one of those topics, and remember to talk with a trusted grown-up about your own family or school plan.'}
 async function askRocky(q){if(!CONFIG.aiEnabled)return preparedAnswer(q);try{const res=await fetch(CONFIG.chatEndpoint||'/api/chat',{method:'POST',headers:{'Content-Type':'application/json',...(session?.access_token?{Authorization:'Bearer '+session.access_token}:{})},body:JSON.stringify({message:q,history:chatHistory.slice(-10)})});if(!res.ok)throw new Error('Chat service returned '+res.status);const data=await res.json();if(!data.reply)throw new Error('Empty reply');return data.reply}catch(e){console.error(e);return 'I am having trouble connecting right now. Here is a prepared safety tip: stay with a trusted grown-up and follow your school or family emergency plan. You can try your question again in a moment.'}}
 
+function renderRockyMessage(element, text){
+  // Render only the small Markdown subset Rocky needs. Build DOM nodes rather
+  // than using innerHTML so model output can never inject HTML or scripts.
+  const parts = String(text || '').split(/(\\*\\*[^*]+\\*\\*)/g);
+  element.replaceChildren();
+  for (const part of parts) {
+    if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
+      const strong = document.createElement('strong');
+      strong.textContent = part.slice(2, -2);
+      element.appendChild(strong);
+    } else {
+      element.appendChild(document.createTextNode(part));
+    }
+  }
+}
+
 document.getElementById('chatForm').addEventListener('submit', async e => {
     e.preventDefault();
 
@@ -203,7 +219,7 @@ document.getElementById('chatForm').addEventListener('submit', async e => {
             return;
         }
 
-        pending.textContent = reply;
+        renderRockyMessage(pending, reply);
 
         chatHistory.push(
             { role: 'user', content: q },
