@@ -22,8 +22,10 @@ const safetyFlashcards = [
 let flashcardDeck = [...safetyFlashcards];
 let flashcardIndex = 0;
 let flashcardFlipped = false;
-const flashcardKnown = new Set();
-const flashcardReviewed = new Set();
+const flashcardKnown = new Set(progress.flashcardsKnown||[]);
+const flashcardReviewed = new Set(progress.flashcardsReview||[]);
+function persistFlashcardProgress(){progress.flashcardsKnown=[...flashcardKnown];progress.flashcardsReview=[...flashcardReviewed];if(typeof persist==='function')persist();}
+function applyFlashcardProgress(){flashcardKnown.clear();flashcardReviewed.clear();(progress.flashcardsKnown||[]).forEach(id=>flashcardKnown.add(id));(progress.flashcardsReview||[]).forEach(id=>flashcardReviewed.add(id));if(typeof renderFlashcard==='function')renderFlashcard();}
 const flashcardEls = {
   card:document.getElementById('flashcard'),topic:document.getElementById('flashcardTopicLabel'),
   front:document.getElementById('flashcardPrompt'),hint:document.getElementById('flashcardHint'),
@@ -55,8 +57,8 @@ function setFlashcardTopic(topic){flashcardDeck=topic==='all'?[...safetyFlashcar
 flashcardEls.card.addEventListener('click',flipFlashcard);
 flashcardEls.previous.addEventListener('click',()=>moveFlashcard(-1));
 flashcardEls.next.addEventListener('click',()=>moveFlashcard(1));
-document.getElementById('flashcardKnownButton').addEventListener('click',()=>{if(!flashcardDeck.length)return;const card=flashcardDeck[flashcardIndex];flashcardKnown.add(card.front);flashcardReviewed.add(card.front);moveFlashcard(flashcardIndex===flashcardDeck.length-1?0:1);});
-document.getElementById('flashcardReview').addEventListener('click',()=>{if(!flashcardDeck.length)return;flashcardKnown.delete(flashcardDeck[flashcardIndex].front);flashcardReviewed.add(flashcardDeck[flashcardIndex].front);moveFlashcard(flashcardIndex===flashcardDeck.length-1?0:1);});
+document.getElementById('flashcardKnownButton').addEventListener('click',()=>{if(!flashcardDeck.length)return;const card=flashcardDeck[flashcardIndex];flashcardKnown.add(card.front);flashcardReviewed.delete(card.front);persistFlashcardProgress();moveFlashcard(flashcardIndex===flashcardDeck.length-1?0:1);});
+document.getElementById('flashcardReview').addEventListener('click',()=>{if(!flashcardDeck.length)return;flashcardKnown.delete(flashcardDeck[flashcardIndex].front);flashcardReviewed.add(flashcardDeck[flashcardIndex].front);persistFlashcardProgress();moveFlashcard(flashcardIndex===flashcardDeck.length-1?0:1);});
 document.getElementById('flashcardTopic').addEventListener('change',e=>setFlashcardTopic(e.target.value));
 document.getElementById('shuffleFlashcards').addEventListener('click',()=>{for(let i=flashcardDeck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[flashcardDeck[i],flashcardDeck[j]]=[flashcardDeck[j],flashcardDeck[i]];}flashcardIndex=0;flashcardFlipped=false;renderFlashcard();});
 renderFlashcard();
