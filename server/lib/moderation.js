@@ -1,57 +1,57 @@
 "use strict";
+
 /*
- * Content moderation using OpenAI's moderation endpoint.
- *
- * moderate(textOrArray) resolves to one of:
- *   { ok: true,  items: [...] }
- *   { ok: false, items: [...] }   at least one input was flagged
- *   { ok: false, failed: true }   the check could not run (callers should fail closed)
- *
- * `items` lines up one-to-one with the inputs:
- *   { flagged: boolean, selfHarm: boolean, categories: string[] }
- *
- * Only category names are ever logged, never message text.
+ * Local, conservative safety screening for Rocky.
+ * NRP's documented OpenAI-compatible API exposes chat completions, not the
+ * OpenAI Moderation endpoint. This is a lightweight first-pass guardrail,
+ * not a substitute for dedicated moderation or human safety review.
  */
+const RULES = [
+  {
+    category: "self-harm",
+    selfHarm: true,
+    patterns: [
+      /\b(?:suicid(?:e|al)|kill myself|end my life|want to die|wish i was dead)\b/i,
+      /\b(?:hurt|harm|cut|burn) myself\b/i,
+      /\bself[ -]?harm(?:ing)?\b/i
+    ]
+  },
+  {
+    category: "sexual",
+    patterns: [
+      /\b(?:porn(?:ography)?|nudes?|send(?:ing)? nudes|sexually explicit)\b/i,
+      /\b(?:sexually abuse|sexual assault|rape[sd]?)\b/i
+    ]
+  },
+  {
+    category: "violence",
+    patterns: [
+      /\b(?:how to|ways to|help me)\s+(?:kill|murder|shoot|stab|poison|hurt)\s+(?:someone|a person|people|him|her|them)\b/i,
+      /\b(?:make|build)\s+(?:a|an)\s+(?:bomb|explosive)\b/i,
+      /\b(?:threaten|attack|murder)\s+(?:someone|a person|people|him|her|them)\b/i
+    ]
+  }
+];
 
-const MODEL = process.env.OPENAI_MODERATION_MODEL || "omni-moderation-latest";
+function inspect(text) {
+  const value = String(text ?? "");
+  const categories = [];
+  let selfHarm = false;
+  for (const rule of RULES) {
+    if (rule.patterns.some(pattern => pattern.test(value))) {
+      categories.push(rule.category);
+      if (rule.selfHarm) selfHarm = true;
+    }
+  }
+  return { flagged: categories.length > 0, selfHarm, categories };
+}
 
-function createModerator(openai) {
+function createModerator() {
   return async function moderate(input) {
     const inputs = Array.isArray(input) ? input : [input];
-    // The API rejects empty strings, so blank inputs are replaced and never flagged.
-    const texts = inputs.map(t => String(t ?? "").trim() || ".");
-    if (!openai) return { ok: false, failed: true };
-
-    try {
-      const res = await openai.moderations.create(
-        { model: MODEL, input: texts },
-        { timeout: 8000, maxRetries: 1 }
-      );
-      const results = res?.results;
-      if (!Array.isArray(results) || results.length !== texts.length) return { ok: false, failed: true };
-
-      const items = results.map(r => {
-        const categories = Object.entries(r?.categories || {}).filter(([, hit]) => hit).map(([name]) => name);
-        return {
-          flagged: Boolean(r?.flagged),
-          selfHarm: categories.some(c => c.startsWith("self-harm")),
-          categories
-        };
-      });
-      return { ok: !items.some(i => i.flagged), items };
-    } catch (err) {
-      // Keep enough metadata to diagnose invalid keys, permissions, rate limits, and outages.
-      // Never log the API key or the text being moderated.
-      console.error("OpenAI moderation check failed:", {
-        // Do not log provider error messages; they may include a masked credential fragment.
-        status: err.status || err.statusCode || null,
-        code: err.code || null,
-        type: err.type || null,
-        requestId: err.request_id || err.headers?.["x-request-id"] || null
-      });
-      return { ok: false, failed: true };
-    }
+    const items = inputs.map(inspect);
+    return { ok: !items.some(item => item.flagged), items, failed: false };
   };
 }
 
-module.exports = { createModerator };
+module.exports = { createModerator, inspect };
