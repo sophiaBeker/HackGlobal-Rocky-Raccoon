@@ -76,13 +76,23 @@ function renderShop(){
   const pointsEl=document.getElementById('shopPoints');if(pointsEl)pointsEl.textContent=progress.points||0;
   if(avatarEl)avatarEl.innerHTML=Object.entries(avatarCatalog).map(([key,item])=>{
     const owned=ownedAvatars.includes(key);
-    return '<article class="shop-item"><div class="shop-item-art">'+raccoonMarkup(key,'none','large')+'</div><strong>'+item.name+'</strong><p>'+item.description+'</p><small>'+(owned?'Already owned':'⭐ '+item.price+' points')+'</small><button class="'+(owned?'secondary':'btn')+'" type="button" '+(owned?'disabled':'')+' onclick="buyAvatar(\''+key+'\')">'+(owned?'Owned':'Buy · '+item.price)+'</button></article>';
+    return '<article class="shop-item"><div class="shop-item-art">'+raccoonMarkup(key,'none','large')+'</div><strong>'+item.name+'</strong><p>'+item.description+'</p><small>'+(owned?'Already owned':'⭐ '+item.price+' points')+'</small><button class="secondary" type="button" onclick="showShopDetails(\'avatar\',\''+key+'\')">View details</button><button class="'+(owned?'secondary':'btn')+'" type="button" '+(owned?'disabled':'')+' onclick="buyAvatar(\''+key+'\')">'+(owned?'Owned':'Buy · '+item.price)+'</button></article>';
   }).join('');
   if(accessoryEl)accessoryEl.innerHTML=Object.entries(accessoryCatalog).filter(([key])=>key!=='none').map(([key,item])=>{
     const owned=ownedAccessories.includes(key);
-    return '<article class="shop-item"><div class="shop-item-art accessory-art">'+item.emoji+'</div><strong>'+item.name+'</strong><p>'+item.description+'</p><small>'+(owned?'Already owned':'⭐ '+item.price+' points')+'</small><button class="'+(owned?'secondary':'btn')+'" type="button" '+(owned?'disabled':'')+' onclick="buyAccessory(\''+key+'\')">'+(owned?'Owned':'Buy · '+item.price)+'</button></article>';
+    return '<article class="shop-item"><div class="shop-item-art accessory-art">'+item.emoji+'</div><strong>'+item.name+'</strong><p>'+item.description+'</p><small>'+(owned?'Already owned':'⭐ '+item.price+' points')+'</small><button class="secondary" type="button" onclick="showShopDetails(\'accessory\',\''+key+'\')">View details</button><button class="'+(owned?'secondary':'btn')+'" type="button" '+(owned?'disabled':'')+' onclick="buyAccessory(\''+key+'\')">'+(owned?'Owned':'Buy · '+item.price)+'</button></article>';
   }).join('');
   updateAvatarDisplay();
+}
+function showShopDetails(type,key){
+  const item=(type==='avatar'?avatarCatalog:accessoryCatalog)[key];
+  const panel=document.getElementById('shopDetails');
+  if(!item||!panel)return;
+  const owned=(type==='avatar'?(progress.ownedAvatars||[]):(progress.ownedAccessories||[])).includes(key);
+  const preview=type==='avatar'?raccoonMarkup(key,'none','large'):'<span class="shop-detail-emoji">'+item.emoji+'</span>';
+  panel.innerHTML='<div class="shop-detail-preview">'+preview+'</div><div class="shop-detail-copy"><h3>'+item.name+'</h3><p>'+item.description+'</p><p><strong>'+(owned?'Already in your collection':'Price: ⭐ '+item.price+' quest points')+'</strong></p><button class="btn" type="button" '+(owned||progress.points<item.price?'disabled':'')+' onclick="'+(type==='avatar'?'buyAvatar':'buyAccessory')+'(\''+key+'\')">'+(owned?'Owned':progress.points<item.price?'Not enough points':'Buy · '+item.price+' points')+'</button></div><button class="shop-detail-close secondary" type="button" onclick="document.getElementById(\'shopDetails\').hidden=true" aria-label="Close item details">Close</button>';
+  panel.hidden=false;
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 function renderCustomization(){
   const avatarEl=document.getElementById('ownedAvatarChoices'),accessoryEl=document.getElementById('ownedAccessoryChoices');
