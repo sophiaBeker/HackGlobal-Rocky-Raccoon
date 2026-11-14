@@ -187,7 +187,14 @@ function createApp({ openai, supabase, lessons }) {
 
       res.json({ reply });
     } catch (err) {
-      console.error("Rocky chat error:", err.message); // never log message content
+      // Log actionable provider diagnostics without logging prompts, credentials, or response content.
+      console.error("Rocky chat error:", {
+        message: err.message,
+        status: err.status || err.statusCode || null,
+        code: err.code || null,
+        type: err.type || null,
+        requestId: err.request_id || err.headers?.["x-request-id"] || null
+      });
       res.status(500).json({ error: TROUBLE_REPLY });
     }
   });
@@ -226,6 +233,8 @@ function createApp({ openai, supabase, lessons }) {
   app.get("/api/health", (_req, res) => res.json({
     ok: true,
     aiConfigured: Boolean(openai),
+    aiModel: process.env.OPENAI_MODEL || "gpt-4.1-mini",
+    openaiKeyPresent: Boolean(process.env.OPENAI_API_KEY),
     authConfigured: Boolean(supabase),
     lessons: lessons.ids().length
   }));
