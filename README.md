@@ -61,10 +61,10 @@ Safety Quest supports both guest learners and registered users.
 
 - **Frontend:** HTML, CSS, JavaScript
 - **Authentication and Data Storage:** Supabase
-- **AI Integration:** OpenAI API
+- **AI Integration:** NRP-hosted LLMs through an OpenAI-compatible API
 - **Configuration:** Environment variables for API credentials and service connections
 
-Some integrations require API credentials and environment configuration before they can be used.
+Rocky's AI uses the NRP OpenAI-compatible endpoint (`https://ellm.nrp-nautilus.io/v1`) with the `gpt-oss` model by default. Set `NRP_API_KEY`, `NRP_BASE_URL`, and `NRP_MODEL` in your local `.env` file. The server performs lightweight local safety screening; this is not a replacement for dedicated moderation or a production child-safety review.
 
 ## Safety and Educational Responsibility
 
@@ -94,7 +94,7 @@ To run the project locally:
 1. Clone the repository.
 2. Navigate to the project directory.
 3. Review the `.env.example` file for required environment variables.
-4. Configure the necessary Supabase and AI API credentials.
+4. Configure the necessary Supabase credentials and an NRP LLM API token (`NRP_API_KEY`).
 5. Install dependencies from the repository root with `npm install`.
 6. Start the application with `npm start` (or use `npm run dev` during development).
 
