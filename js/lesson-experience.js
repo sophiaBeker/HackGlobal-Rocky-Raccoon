@@ -119,7 +119,29 @@
         }));
 
       (extraQuestions[activeLesson] || []).forEach(question => questions.push(question));
-      return questions.slice(0, 5);
+
+      // Preserve the lesson's teaching sequence; shuffle only answer positions.
+      return questions.slice(0, 5).map(question => {
+        const order = question.answers.map((_, index) => index);
+        for (let i = order.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [order[i], order[j]] = [order[j], order[i]];
+        }
+
+        const shuffledWrongWhy = {};
+        order.forEach((originalIndex, shuffledIndex) => {
+          if (question.wrongWhy && question.wrongWhy[originalIndex]) {
+            shuffledWrongWhy[shuffledIndex] = question.wrongWhy[originalIndex];
+          }
+        });
+
+        return {
+          ...question,
+          answers: order.map(originalIndex => question.answers[originalIndex]),
+          correct: order.indexOf(question.correct),
+          wrongWhy: shuffledWrongWhy
+        };
+      });
     }
   
     function progressDots(total, current, completed) {
