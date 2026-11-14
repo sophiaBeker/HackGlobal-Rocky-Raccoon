@@ -41,8 +41,8 @@ const themeCatalog={
 };
 const avatarCatalog={
   classic:{name:'Classic Rocky',color:'#92999b',price:0,description:'Rocky’s familiar gray fur.'},
-  red:{name:'Berry Rocky',color:'#c96f72',price:35,description:'A cheerful berry-red coat.'},
-  blue:{name:'Sky Rocky',color:'#6da6ce',price:35,description:'A bright sky-blue coat.'},
+  red:{name:'Berry Rocky',color:'#c96f72',price:25,description:'A cheerful berry-red coat.'},
+  blue:{name:'Sky Rocky',color:'#6da6ce',price:30,description:'A bright sky-blue coat.'},
   purple:{name:'Plum Rocky',color:'#9a80bd',price:50,description:'A playful plum-purple coat.'},
   gold:{name:'Sunny Rocky',color:'#e2b64e',price:50,description:'A warm golden coat.'},
   mint:{name:'Mint Rocky',color:'#72b99a',price:65,description:'A fresh mint-green coat.'}
