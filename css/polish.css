@@ -87,12 +87,16 @@ body.large-text .callout,body.large-text .notice{font-size:17px}
 .chat-chip:disabled{opacity:.5;cursor:not-allowed}
 
 /* ---------- Read aloud + streak ---------- */
-.read-aloud{margin:0 0 14px;display:inline-flex;align-items:center;gap:6px}
+.sq-reading,.sq-quiz,.sq-summary{position:relative}
+.sq-reading .sq-reading-kicker,.sq-quiz .sq-reading-kicker,.sq-summary .sq-reading-kicker{padding-right:155px}
+.read-aloud{position:absolute;top:14px;right:14px;z-index:2;margin:0;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 .streak-pill{background:#fff5e7;border-color:#f0d3a8;color:#73512f}
 
 /* ---------- Mobile bottom tab bar ---------- */
 .tabbar,.more-sheet{display:none}
 @media (max-width:680px){
+  .sq-reading .sq-reading-kicker,.sq-quiz .sq-reading-kicker,.sq-summary .sq-reading-kicker{padding-right:135px}
+  .read-aloud{top:10px;right:10px;padding:8px 10px;font-size:13px}
   .nav{display:none}
   aside{justify-content:flex-start}
   main{padding-bottom:104px}
