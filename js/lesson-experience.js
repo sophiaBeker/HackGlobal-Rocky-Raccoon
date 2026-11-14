@@ -400,12 +400,13 @@
         if (!checked) {
           checked = true;
           if (selectedIndex === question.correct) {
-            if (firstAttemptCorrect) {
-              score++;
-              // Only an uncompleted lesson can earn quiz points; retries never pay again.
-              if (!progress.completed.includes(activeLesson) && !completedThisRun) {
-                pointsEarnedThisRun += 5;
-              }
+            score++;
+            const rewardedQuestions = progress.quizQuestionRewards[activeLesson] || [];
+            const rewardKey = String(quizIndex);
+            if (!rewardedQuestions.includes(rewardKey)) {
+              rewardedQuestions.push(rewardKey);
+              progress.quizQuestionRewards[activeLesson] = rewardedQuestions;
+              pointsEarnedThisRun += 5;
             }
           } else {
             wrongAttempts++;
@@ -456,17 +457,13 @@
   
       if (!completedThisRun) {
         const alreadyCompleted = progress.completed.includes(activeLesson);
-      
         if (!alreadyCompleted) {
           progress.completed.push(activeLesson);
-          // Award the first-run quiz points and lesson completion bonus together.
+          // The lesson completion bonus is awarded only once.
           pointsEarnedThisRun += 20;
-          progress.points = (progress.points || 0) + pointsEarnedThisRun;
-        } else {
-          // Retakes remain available, but completed lessons cannot award points again.
-          pointsEarnedThisRun = 0;
         }
-      
+        // Newly mastered questions can still earn their one-time reward on later retakes.
+        progress.points = (progress.points || 0) + pointsEarnedThisRun;
         completedThisRun = true;
       }
       
@@ -512,6 +509,7 @@
       document.getElementById("sqRetry").addEventListener("click", () => {
         quizIndex = 0; selectedIndex = null; checked = false; score = 0;
         wrongAttempts = 0; firstAttemptCorrect = true; quizCountedThisRun = false; pointsEarnedThisRun = 0;
+        completedThisRun = false;
         quizQuestions = makeQuiz(data); mode = "quiz"; renderLesson();
       });
     }
