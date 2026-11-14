@@ -59,37 +59,7 @@ Prioritize these rules:
 - Never claim you have contacted emergency services or a caregiver.
 Keep answers concise (usually 2–5 sentences).`;
 
-const ALLOWED_TOPICS = [
-  // general safety
-  "emergency", "safety", "safe", "prepared", "preparedness", "family plan", "kit", "backpack", "go-bag", "go bag",
-  "help", "adult", "grown-up", "grown up", "teacher", "caregiver", "evacuat", "shelter", "drill", "alarm",
-  // earthquakes
-  "earthquake", "shake", "aftershock", "drop", "cover", "hold on",
-  // fire
-  "fire", "smoke", "burn", "lighter", "stop drop roll",
-  // floods
-  "flood", "rain", "storm", "water",
-  // blackouts
-  "blackout", "power", "outage", "electric", "flashlight", "battery", "batteries", "radio", "candle",
-  // first aid and calling for help
-  "first aid", "first-aid", "hurt", "injur", "ambulance", "paramedic", "police", "firefighter", "responder",
-  "911", "999", "112",
-  // feelings
-  "afraid", "scared", "worried", "nervous", "frighten"
-];
-
-const isOnTopic = text => {
-  const lower = String(text || "").toLowerCase();
-  return ALLOWED_TOPICS.some(topic => lower.includes(topic));
-};
-
-// Short follow-ups like "why?" or "what about at night?" have no keywords of their own.
-// Allow them if one of the learner's last two messages was on topic. Only the learner's
-// messages count: Rocky's own deflection reply mentions topics and would let anything through.
-const isFollowUp = (message, history) =>
-  message.length <= 80 &&
-  history.filter(m => m.role === "user").slice(-2).some(m => isOnTopic(m.content));
-
+const { isOnTopic, isFollowUp } = require("./lib/topics");
 const DEFLECTION = "That's a good question to bring to a trusted grown-up, Explorer. I can help with earthquake safety, fire safety, floods, power outages, emergency kits, getting help, and more. What would you like to learn about?";
 const PRIVATE_INFO_REPLY = "Let's keep private things safe, Explorer! Please don't share things like your address, phone number, or email here. If you need to share something private, a trusted grown-up can help. What would you like to learn about safety?";
 const NEEDS_GROWNUP_REPLY = "I can't help with that one, Explorer. It's something to talk about with a trusted grown-up, like a parent, a teacher, or a school helper. I'm here for safety questions whenever you're ready.";

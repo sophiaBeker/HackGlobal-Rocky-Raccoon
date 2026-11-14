@@ -104,17 +104,20 @@
   
     function makeQuiz(data) {
       const questions = (data.sections || [])
-        .filter(section => Array.isArray(section.answers) &&
+        .map((section, index) => ({ section, index }))
+        .filter(({ section }) => Array.isArray(section.answers) &&
           Number.isInteger(section.correct) &&
           section.answers.length >= 2)
-        .map(section => ({
+        .map(({ section, index }) => ({
           question: section.q || `What is important to remember about "${section.title}"?`,
           answers: section.answers.slice(),
           correct: section.correct,
           why: section.why || "Remember to follow your trusted adult's safety instructions.",
-          wrongWhy: wrongAnswerExplanations[section.q] || {}
+          callout: section.callout || "",
+          wrongWhy: wrongAnswerExplanations[section.q] || {},
+          sectionIndex: index
         }));
-  
+
       (extraQuestions[activeLesson] || []).forEach(question => questions.push(question));
       return questions.slice(0, 5);
     }
@@ -450,6 +453,14 @@
         quizQuestions = makeQuiz(data); mode = "quiz"; renderLesson();
       });
     }
+
+    window.sqQuizState = () => ({
+      mode,
+      lessonId: activeLesson,
+      question: quizQuestions[quizIndex],
+      selectedIndex,
+      checked
+    });
   
     window.renderLesson = function renderReadFirstLesson() {
       if (mode === "reading") renderReading();
