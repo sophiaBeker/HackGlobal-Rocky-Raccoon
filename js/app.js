@@ -160,10 +160,54 @@ let s=d.sections[sectionIndex];document.getElementById('lessonContent').innerHTM
 function chooseAnswer(i){if(answered)return;selectedAnswer=i;answered=true;progress.quizzes++;if(i===lessonData[activeLesson].sections[sectionIndex].correct){progress.points+=5;lessonCorrectAnswers++;}persist();renderLesson()}
 function nextSection(){if(!answered)return;sectionIndex++;selectedAnswer=null;answered=false;renderLesson()}
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));document.getElementById('moduleSearch').addEventListener('input',filterModules);
-function renderAccount(){const el=document.getElementById('accountContent');if(user){el.innerHTML=`<div class="panel"><h3>Welcome back, Explorer!</h3><p class="desc">Your account is signed in.</p><div class="account-row"><span>Email</span><strong>${escapeHtml(user.email||'')}</strong></div><div class="account-row"><span>Lessons completed</span><strong>${progress.completed.length} / ${modules.length}</strong></div><div class="account-row"><span>Quest points</span><strong>${progress.points}</strong></div><p class="chat-tip">Your progress is saved to the configured Supabase project.</p><button class="secondary" onclick="logout()">Log out</button></div>`;return}
-let setupNote=supabaseReady?'Create an account to save your progress and unlock all six lessons.':'Guest mode is ready. For real account creation, the project owner must configure Supabase using the setup guide. No password is stored by this demo.';el.innerHTML=`<div class="panel"><h3>Join the adventure</h3><p class="desc">Create an account or log in to save your progress.</p><div id="authNotice" class="notice">${setupNote}</div><div class="form-grid"><div class="field"><label for="displayName">Choose a nickname</label><input id="displayName" autocomplete="nickname" maxlength="20" placeholder="e.g. StarryFox or BraveBadger"><p class="chat-tip">Use a fun nickname instead of your real name. Avoid your full name, birthday, school, or other personal details.</p></div><div class="field"><label for="authEmail">Email</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com" required></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters" required></div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="authAction('signup')">Create account</button><button class="secondary" onclick="authAction('login')">Log in</button></div><p class="form-switch">You can keep using <button class="link-btn" onclick="showPage('home')">guest mode</button> without signing up.</p></div>`}
+let authView='choice';
+function renderAccount(){
+  const el=document.getElementById('accountContent');
+  if(user){
+    el.innerHTML=`<div class="panel"><h3>Welcome back, Explorer!</h3><p class="desc">Your account is signed in.</p><div class="account-row"><span>Email</span><strong>${escapeHtml(user.email||'')}</strong></div><div class="account-row"><span>Lessons completed</span><strong>${progress.completed.length} / ${modules.length}</strong></div><div class="account-row"><span>Quest points</span><strong>${progress.points}</strong></div><p class="chat-tip">Your progress is saved to the configured Supabase project.</p><button class="secondary" onclick="logout()">Log out</button></div>`;
+    return;
+  }
+  const setupNote=supabaseReady
+    ? 'Create an account to save your progress and unlock all six lessons.'
+    : 'Guest mode is ready. Real account creation and login require the project owner to configure Supabase.';
+  if(authView==='choice'){
+    el.innerHTML=`<div class="panel"><h3>Welcome to Safety Quest!</h3><p class="desc">Choose how you would like to continue.</p><div id="authNotice" class="notice">${setupNote}</div><div class="form-grid"><button class="btn" type="button" onclick="setAuthView('signup')">Create an account</button><button class="secondary" type="button" onclick="setAuthView('login')">Log in</button></div><p class="form-switch">You can keep using <button class="link-btn" type="button" onclick="showPage('home')">guest mode</button> without signing up.</p></div>`;
+    return;
+  }
+  const signup=authView==='signup';
+  el.innerHTML=`<div class="panel">
+    <h3>${signup?'Create your account':'Log in'}</h3>
+    <p class="desc">${signup?'Choose a nickname and account details to save your progress.':'Welcome back! Log in to continue your adventure.'}</p>
+    <div id="authNotice" class="notice">${setupNote}</div>
+    <div class="form-grid">
+      ${signup?`<div class="field"><label for="displayName">Choose a nickname</label><input id="displayName" autocomplete="nickname" maxlength="20" placeholder="e.g. StarryFox or BraveBadger"><p class="chat-tip">Use a fun nickname instead of your real name. Avoid your full name, birthday, school, or other personal details.</p></div>`:''}
+      <div class="field"><label for="authEmail">Email</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com" required></div>
+      <div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" autocomplete="${signup?'new-password':'current-password'}" minlength="8" placeholder="${signup?'At least 8 characters':'Enter your password'}" required></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" type="button" onclick="authAction('${signup?'signup':'login'}')">${signup?'Create account':'Log in'}</button><button class="secondary" type="button" onclick="setAuthView('choice')">Back</button></div>
+    <p class="form-switch">${signup?'Already have an account?':'New to Safety Quest?'} <button class="link-btn" type="button" onclick="setAuthView('${signup?'login':'signup'}')">${signup?'Log in':'Create an account'}</button></p>
+    <p class="form-switch">Or continue in <button class="link-btn" type="button" onclick="showPage('home')">guest mode</button>.</p>
+  </div>`;
+}
+function setAuthView(view){authView=view;renderAccount()}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-async function authAction(mode){const notice=document.getElementById('authNotice'),email=document.getElementById('authEmail').value.trim(),password=document.getElementById('authPassword').value,name=document.getElementById('displayName').value.trim();if(!supabaseReady){notice.textContent='Supabase is not configured yet. Follow README.md to enable real sign-up/login. Guest mode and lessons still work.';return}if(!email||password.length<8){notice.textContent='Enter a valid email and a password with at least 8 characters.';return}if(mode==='signup'&&!/^[A-Za-z0-9 _-]{3,20}$/.test(name)){notice.textContent='Choose a nickname with 3–20 letters, numbers, spaces, hyphens, or underscores. Do not use your real name.';return}notice.textContent='Working…';let result;if(mode==='signup')result=await supabaseClient.auth.signUp({email,password,options:{data:{display_name:name||'Explorer'}}});else result=await supabaseClient.auth.signInWithPassword({email,password});if(result.error){notice.textContent=result.error.message;return}if(mode==='signup'&&!result.data.session){notice.textContent='Account created! Check your email for the confirmation link, then log in.';return}session=result.data.session;user=result.data.user;await loadRemoteProgress();updateStats();renderAccount();notice.textContent=mode==='signup'?'Account created! Your guest progress has been carried over. Welcome to Safety Quest.':'You are logged in!';}
+async function authAction(mode){
+  const notice=document.getElementById('authNotice');
+  const email=document.getElementById('authEmail')?.value.trim()||'';
+  const password=document.getElementById('authPassword')?.value||'';
+  const name=document.getElementById('displayName')?.value.trim()||'';
+  if(!supabaseReady){notice.textContent='Supabase is not configured yet. Follow README.md to enable real sign-up/login. Guest mode and lessons still work.';return}
+  if(!email||password.length<8){notice.textContent='Enter a valid email and a password with at least 8 characters.';return}
+  if(mode==='signup'&&!/^[A-Za-z0-9 _-]{3,20}$/.test(name)){notice.textContent='Choose a nickname with 3–20 letters, numbers, spaces, hyphens, or underscores. Do not use your real name.';return}
+  notice.textContent='Working…';
+  let result;
+  if(mode==='signup')result=await supabaseClient.auth.signUp({email,password,options:{data:{display_name:name}}});
+  else result=await supabaseClient.auth.signInWithPassword({email,password});
+  if(result.error){notice.textContent=result.error.message;return}
+  if(mode==='signup'&&!result.data.session){notice.textContent='Account created! Check your email for the confirmation link, then use the Log in option to sign in.';return}
+  session=result.data.session;user=result.data.user;
+  await loadRemoteProgress();updateStats();renderAccount();
+}
 async function logout(){resetConversationHistory();if(supabaseReady)await supabaseClient.auth.signOut();user=null;session=null;progress={completed:[],points:0,quizzes:0,unlockedThemes:[],activeTheme:'default',flashcardsKnown:[],flashcardsReview:[],ownedAvatars:['classic'],activeAvatar:'classic',ownedAccessories:['none'],activeAccessory:'none'};readGuest();applySiteTheme();if(typeof applyFlashcardProgress==='function')applyFlashcardProgress();updateStats();renderAccount();showPage('home')}
 async function initAuth(){if(supabaseReady){const {data}=await supabaseClient.auth.getSession();session=data.session;user=session?.user||null;supabaseClient.auth.onAuthStateChange((_event,newSession)=>{
     if ((user?.id || null) !== (newSession?.user?.id || null)) {
