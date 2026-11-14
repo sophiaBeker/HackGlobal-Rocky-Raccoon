@@ -323,3 +323,5 @@ document.getElementById('chatForm').addEventListener('submit', async e => {
     }
 });
 
+// Restore guest or account progress before rendering the initial UI.
+initAuth();
