@@ -53,20 +53,20 @@ const themeCatalog={
 };
 const avatarCatalog={
   classic:{name:'Classic Rocky',color:'#92999b',price:0,description:'Rocky’s familiar gray fur.'},
-  red:{name:'Berry Rocky',color:'#c96f72',price:25,description:'A cheerful berry-red coat.'},
-  blue:{name:'Sky Rocky',color:'#6da6ce',price:30,description:'A bright sky-blue coat.'},
-  purple:{name:'Plum Rocky',color:'#9a80bd',price:50,description:'A playful plum-purple coat.'},
-  gold:{name:'Sunny Rocky',color:'#e2b64e',price:50,description:'A warm golden coat.'},
-  mint:{name:'Mint Rocky',color:'#72b99a',price:65,description:'A fresh mint-green coat.'}
+  red:{name:'Berry Rocky',color:'#c96f72',price:15,description:'A cheerful berry-red coat.'},
+  blue:{name:'Sky Rocky',color:'#6da6ce',price:20,description:'A bright sky-blue coat.'},
+  purple:{name:'Plum Rocky',color:'#9a80bd',price:35,description:'A playful plum-purple coat.'},
+  gold:{name:'Sunny Rocky',color:'#e2b64e',price:35,description:'A warm golden coat.'},
+  mint:{name:'Mint Rocky',color:'#72b99a',price:40,description:'A fresh mint-green coat.'}
 };
 const accessoryCatalog={
   none:{name:'No accessory',emoji:'',price:0,description:'Rocky’s classic look.'},
-  bow:{name:'Bright bow',emoji:'🎀',price:20,description:'A colorful bow for Rocky.'},
-  crown:{name:'Little crown',emoji:'👑',price:45,description:'A tiny crown fit for a quest hero.'},
-  glasses:{name:'Cool glasses',emoji:'🕶️',price:35,description:'Rocky’s coolest look.'},
-  explorer:{name:'Explorer hat',emoji:'🧢',price:40,description:'Ready for the next adventure.'},
-  star:{name:'Shiny star',emoji:'⭐',price:30,description:'A little sparkle for Rocky.'},
-  scarf:{name:'Cozy scarf',emoji:'🧣',price:35,description:'A cozy finishing touch.'}
+  bow:{name:'Bright bow',emoji:'🎀',price:15,description:'A colorful bow for Rocky.'},
+  crown:{name:'Little crown',emoji:'👑',price:30,description:'A tiny crown fit for a quest hero.'},
+  glasses:{name:'Cool glasses',emoji:'🕶️',price:25,description:'Rocky’s coolest look.'},
+  explorer:{name:'Explorer hat',emoji:'🧢',price:30,description:'Ready for the next adventure.'},
+  star:{name:'Shiny star',emoji:'⭐',price:20,description:'A little sparkle for Rocky.'},
+  scarf:{name:'Cozy scarf',emoji:'🧣',price:25,description:'A cozy finishing touch.'}
 };
 function raccoonMarkup(avatarKey,accessoryKey,size='large'){
   const fur=avatarCatalog[avatarKey]?.color||avatarCatalog.classic.color;
