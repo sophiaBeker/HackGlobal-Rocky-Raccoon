@@ -99,13 +99,18 @@
   ];
 
   const dayKey = new Date().toLocaleDateString("en-CA");
-  const dailyKey = "safetyQuestDailyChallenge";
+  const dailyKey = "safetyQuestDailyChallenge"; // Per-tab: refresh-safe, but cleared in a new tab.
   const preferenceKey = "safetyQuestDisplayPreferences";
   const challenge = challenges[Math.floor(Date.now() / 86400000) % challenges.length];
   let answered = false;
 
   function readJSON(key, fallback) {
     try { return JSON.parse(localStorage.getItem(key)) || fallback; }
+    catch { return fallback; }
+  }
+
+  function readSessionJSON(key, fallback) {
+    try { return JSON.parse(sessionStorage.getItem(key)) || fallback; }
     catch { return fallback; }
   }
 
@@ -150,7 +155,7 @@
   }
 
   function renderChallenge() {
-    const saved = readJSON(dailyKey, {});
+    const saved = readSessionJSON(dailyKey, {});
     const completedToday = saved.date === dayKey && saved.challengeId === challenge.id;
     challengeRoot.innerHTML = `
       <div class="daily-heading"><div><span class="eyebrow">✦ DAILY SAFETY QUEST</span><h3>${challenge.topic}</h3></div><span class="daily-reward">⭐ 5 points</span></div>
@@ -202,7 +207,7 @@
     }
 
     const saved = { date: dayKey, challengeId: challenge.id };
-    try { localStorage.setItem(dailyKey, JSON.stringify(saved)); } catch {}
+    try { sessionStorage.setItem(dailyKey, JSON.stringify(saved)); } catch {}
     progress.points = Math.max(0, Number(progress.points) || 0) + 5;
     if (typeof persist === "function") persist();
     feedback.textContent = "🌟 " + challenge.why + " You earned 5 quest points!";
