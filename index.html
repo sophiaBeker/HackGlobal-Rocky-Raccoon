@@ -207,6 +207,28 @@
           </div>
         </div>
 
+
+    <div id="conversationHistory" class="conversation-history"
+        aria-label="Previous conversations">
+    </div>
+
+    <div class="chat-history-controls"
+         style="display:flex; justify-content:flex-end; margin:12px 0 16px;">
+
+        <button type="button"
+                id="newChatBtn"
+                class="new-chat-btn"
+                style="background:#deefdd !important; color:#286b55 !important; border:0
+        !important; border-radius:999px !important; padding:14px 22px !important;
+        width:auto !important; font-weight:700; cursor:pointer;"
+
+                onclick="startNewConversation()">
+            + New Chat
+        </button>
+
+    </div>
+
+
         <div id="chatThread" class="chat-thread" aria-live="polite">
           <div class="chat-msg">Try asking: “What does Drop, Cover, and Hold On mean?”</div>
         </div>
