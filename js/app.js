@@ -145,7 +145,7 @@ function updateStats(){document.getElementById('pointsTop').textContent=progress
 function moduleCard(m){let done=progress.completed.includes(m.id);return `<article class="module-card" tabindex="0" role="button" onclick="openLesson('${m.id}')" onkeydown="if(event.key==='Enter')openLesson('${m.id}')"><div class="module-art"><span class="tag">${done?'✓ COMPLETED':m.tag}</span>${m.icon}</div><h3>${m.title}</h3><p>${m.desc}</p><div class="module-foot"><span>◷ ${m.time} · Beginner</span><span>${done?'↻':'→'}</span></div><div class="progress"><span style="width:${done?'100%':'0%'}"></span></div></article>`}
 function renderModules(){document.getElementById('homeModules').innerHTML=modules.slice(0,3).map(moduleCard).join('');filterModules()}
 function filterModules(){let q=(document.getElementById('moduleSearch')?.value||'').toLowerCase();let arr=modules.filter(m=>(m.title+' '+m.desc+' '+m.id+' '+m.tag).toLowerCase().includes(q));document.getElementById('allModules').innerHTML=arr.map(moduleCard).join('');document.getElementById('noResults').style.display=arr.length?'none':'block'}
-function showPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+name)?.classList.add('active');document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===name));document.getElementById('crumbPage').textContent=({home:'Home',explore:'Explore lessons',flashcards:'Flashcards',shop:'Rocky’s Shop',customize:'Customize',rocky:'Ask Rocky',account:'Account',lesson:'Your lesson'})[name]||'Home';window.scrollTo({top:0,behavior:'smooth'});if(name==='explore')filterModules();if(name==='shop')renderShop();if(name==='customize')renderCustomization();if(name==='account')renderAccount()}
+function showPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+name)?.classList.add('active');document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===name));document.getElementById('crumbPage').textContent=({home:'Home',explore:'Explore lessons',flashcards:'Flashcards',shop:'Rocky’s Shop',customize:'Customize',rocky:'Ask Rocky',account:'Account',lesson:'Your lesson'})[name]||'Home';window.scrollTo({top:0,behavior:'smooth'});if(name==='explore')filterModules();if(name==='shop')renderShop();if(name==='customize')renderCustomization();if(name==='account')renderAccount();if(name==='rocky' && typeof renderConversationHistory === 'function'){renderConversationHistory();}}
 const GUEST_LESSON_IDS = new Set(["earthquake"]);
 function openLesson(id) {if (!lessonData[id]) {console.warn("Unknown lesson:", id);return;}if (!user && !GUEST_LESSON_IDS.has(id)) {const proceed = confirm("Guest mode is available for the Earthquake Ready lesson. " + "Create an account to unlock the full lesson library. " + "Open account options?");if (proceed) showPage("account");return;}activeLesson = id;sectionIndex = 0;selectedAnswer = null;answered = false;lessonCorrectAnswers=0;renderLesson();showPage("lesson");}
 function renderLesson(){let d=lessonData[activeLesson];if(!d)return;if(sectionIndex>=d.sections.length){let done=progress.completed.includes(activeLesson);const perfectRun=lessonCorrectAnswers===d.sections.length;const newlyUnlocked=perfectRun&&!(progress.unlockedThemes||[]).includes(activeLesson);if(perfectRun){progress.unlockedThemes=Array.from(new Set([...(progress.unlockedThemes||[]),activeLesson]));if(newlyUnlocked)persist();}document.getElementById('lessonContent').innerHTML=`<div class="lesson-panel finish"><div class="big">🏆</div><h2>Quest complete!</h2><p>${done?'Great review, Explorer!':'You practiced an important safety skill. Review your family or school plan with a trusted grown-up.'}</p><div style="font:900 15px Nunito;color:var(--green);margin:15px 0">${perfectRun?(newlyUnlocked?'🌟 Perfect score! You unlocked the '+themeCatalog[activeLesson].name+' theme!':'🌟 Perfect score! You earned this module’s theme.'):'Keep practicing to earn this module’s theme.'}</div><button class="btn" onclick="showPage('explore')">Choose another quest →</button> <button class="secondary" onclick="showPage('home')">Home</button></div>`;if(!done){progress.completed.push(activeLesson);progress.points+=20;persist();renderModules()}return}
@@ -221,7 +221,12 @@ document.getElementById('chatForm').addEventListener('submit', async e => {
     thread.scrollTop = thread.scrollHeight;
 
     try {
-        const reply = await askRocky(q);
+        // Saves the student's question before asking Rocky.
+        if (requestUserId && supabaseClient) {
+            if (!activeConversationId) {
+                const id = await createConversation(q.slice(0, 60));
+                if (!id) return;
+            }
 
         // Stop if the conversation or account changed.
         if (
@@ -230,6 +235,39 @@ document.getElementById('chatForm').addEventListener('submit', async e => {
         ) {
             return;
         }
+
+        const conversationId = activeConversationId;
+
+        const { error } = await supabaseClient
+            .from('conversation_messages')
+            .insert({
+                conversation_id: conversationId,
+                role: 'user',
+                content: q
+            });
+
+        if (error) {
+            console.error('Could not save user message:', error);
+        }
+
+        if (
+            generation !== conversationGeneration ||
+            requestUserId !== (user?.id || null)
+        ) {
+            return;
+        }
+
+        await renderConversationHistory();
+    }
+
+    const reply = await askRocky(q);
+
+    if (
+        generation !== conversationGeneration ||
+        requestUserId !== (user?.id || null)
+    ) {
+        return;
+    }
 
         renderRockyMessage(pending, reply);
 
@@ -241,39 +279,22 @@ document.getElementById('chatForm').addEventListener('submit', async e => {
         chatHistory = chatHistory.slice(-12);
         thread.scrollTop = thread.scrollHeight;
 
-        // Save the exchange for signed-in users.
-        if (requestUserId && supabaseClient) {
-            // Create a conversation if this is the first message.
-            if (!activeConversationId) {
-                const id = await createConversation();
 
-                if (!id) return;
-            }
-
-            const conversationId = activeConversationId;
-
-            // Don't save if the chat changed while creating it.
-            if (
-                generation !== conversationGeneration ||
-                requestUserId !== (user?.id || null)
-            ) {
-                return;
-            }
-
-            // Save both messages to this specific conversation.
-            const messages = [
-                { conversation_id: conversationId, role: 'user', content: q },
-                { conversation_id: conversationId, role: 'assistant', content: reply }
-            ];
-
+        // Save only Rocky's reply.
+        if (requestUserId && supabaseClient && activeConversationId) {
             const { error } = await supabaseClient
                 .from('conversation_messages')
-                .insert(messages);
+                .insert({
+                    conversation_id: activeConversationId,
+                    role: 'assistant',
+                    content: reply
+                });
 
             if (error) {
-                console.error('Could not save chat exchange:', error);
+                console.error('Could not save Rocky reply:', error);
             }
         }
+
     } catch (error) {
         console.error('Rocky chat error:', error);
         if (
