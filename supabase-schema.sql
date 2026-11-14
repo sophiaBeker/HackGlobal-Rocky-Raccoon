@@ -90,6 +90,14 @@ create policy "Users can create own conversations"
   to authenticated
   with check (auth.uid() = user_id);
 
+-- Users can rename/update only their own conversations.
+drop policy if exists "Users can update own conversations" on public.conversations;
+create policy "Users can update own conversations"
+  on public.conversations for update
+  to authenticated
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
 -- Users can delete their own conversations.
 drop policy if exists "Users can delete own conversations" on public.conversations;
 create policy "Users can delete own conversations"
