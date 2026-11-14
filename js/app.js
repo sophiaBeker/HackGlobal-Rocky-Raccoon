@@ -1,7 +1,19 @@
 /* Configure these public Supabase project values in config.js. Never put a service-role key here. */
 const CONFIG = window.SAFETY_QUEST_CONFIG || {};
 const supabaseReady = !!(CONFIG.supabaseUrl && CONFIG.supabaseAnonKey && window.supabase);
-const supabaseClient = supabaseReady ? window.supabase.createClient(CONFIG.supabaseUrl,CONFIG.supabaseAnonKey) : null;
+// Explicitly persist auth sessions in this browser so refreshes do not sign users out.
+const supabaseClient = supabaseReady ? window.supabase.createClient(
+  CONFIG.supabaseUrl,
+  CONFIG.supabaseAnonKey,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      storage: window.localStorage
+    }
+  }
+) : null;
 const modules=[
 {id:'earthquake',title:'Earthquake Ready',icon:'🌎',tag:'GUEST QUEST',desc:'Learn how to protect yourself when the ground shakes.',time:'3 min'},
 {id:'fire',title:'Fire Safety Basics',icon:'🔥',tag:'ESSENTIAL',desc:'Learn safe choices around fire and what to do if there is one.',time:'4 min'},
