@@ -40,7 +40,15 @@ function createModerator(openai) {
       });
       return { ok: !items.some(i => i.flagged), items };
     } catch (err) {
-      console.error("Moderation check failed:", err.message);
+      // Keep enough metadata to diagnose invalid keys, permissions, rate limits, and outages.
+      // Never log the API key or the text being moderated.
+      console.error("OpenAI moderation check failed:", {
+        message: err.message,
+        status: err.status || err.statusCode || null,
+        code: err.code || null,
+        type: err.type || null,
+        requestId: err.request_id || err.headers?.["x-request-id"] || null
+      });
       return { ok: false, failed: true };
     }
   };
