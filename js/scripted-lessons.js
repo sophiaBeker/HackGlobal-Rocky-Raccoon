@@ -485,6 +485,14 @@
         time: "6 min"
       },
       {
+        id: "blackout",
+        title: "Blackout Preparedness",
+        icon: "🔦",
+        tag: "POWER OUTAGES",
+        desc: "Learn how to stay safe when the power goes out.",
+        time: "6 min"
+      },
+      {
         id: "kit",
         title: "General Safety & Preparedness",
         icon: "🎒",
@@ -499,14 +507,6 @@
         tag: "GETTING HELP",
         desc: "Learn how emergency numbers differ around the world and how to get help.",
         time: "7 min"
-      },
-      {
-        id: "blackout",
-        title: "Blackout Preparedness",
-        icon: "🔦",
-        tag: "POWER OUTAGES",
-        desc: "Learn how to stay safe when the power goes out.",
-        time: "6 min"
       }
     ];
   
