@@ -31,6 +31,13 @@
   // Cache replies so re-renders don't lose them or re-spend API calls.
   const cache = new Map();
 
+  // The quiz shuffles answers on screen, but the server knows the lesson's original order.
+  function originalIndex(q, shownIndex) {
+    return Array.isArray(q.order) && Number.isInteger(q.order[shownIndex])
+      ? q.order[shownIndex]
+      : shownIndex;
+  }
+
   function preparedExplanation(q) {
     const safest = q.answers[q.correct];
     // Strip leading emoji/symbols only, never real words.
@@ -62,7 +69,7 @@
         body: JSON.stringify({
           lessonId: state.lessonId,
           sectionIndex: q.sectionIndex,
-          selectedIndex: state.selectedIndex
+          selectedIndex: originalIndex(q, state.selectedIndex)
         })
       });
       if (!res.ok) throw new Error("Explain service returned " + res.status);
@@ -108,7 +115,8 @@
     const feedback = content?.querySelector(".sq-feedback-wrong");
     if (!feedback || content.querySelector(".rw-box")) return;
 
-    const key = `${state.lessonId}:${Number.isInteger(q.sectionIndex) ? q.sectionIndex : q.question}:${state.selectedIndex}`;
+    // Key on the ORIGINAL index so a retake with a different shuffle can't reuse a wrong reply.
+    const key = `${state.lessonId}:${Number.isInteger(q.sectionIndex) ? q.sectionIndex : q.question}:${originalIndex(q, state.selectedIndex)}`;
 
     const box = document.createElement("div");
     box.className = "rw-box";

@@ -148,7 +148,7 @@
         previousAnswerOrders.set(key, order.slice());
         previousCorrectPositions.set(key, order.indexOf(question.correct));
 
-        const shuffledWrongWhy = {};
+                const shuffledWrongWhy = {};
         order.forEach((originalIndex, shuffledIndex) => {
           if (question.wrongWhy && question.wrongWhy[originalIndex]) {
             shuffledWrongWhy[shuffledIndex] = question.wrongWhy[originalIndex];
@@ -159,7 +159,8 @@
           ...question,
           answers: order.map(originalIndex => question.answers[originalIndex]),
           correct: order.indexOf(question.correct),
-          wrongWhy: shuffledWrongWhy
+          wrongWhy: shuffledWrongWhy,
+          order: order.slice() // order[shownPosition] = position in the lesson file
         };
       });
     }
