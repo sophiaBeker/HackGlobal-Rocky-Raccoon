@@ -245,3 +245,43 @@ body.large-text .callout,body.large-text .notice{font-size:17px}
     border-color: var(--line);
   }
 }
+
+
+/* ---------- Mobile account access prompt ---------- */
+@media (max-width: 680px) {
+  .topbar .top-actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+    margin-top: 10px;
+  }
+
+  .topbar .top-actions::before {
+    content: "Save your progress";
+    grid-column: 1 / -1;
+    color: var(--muted);
+    font: 800 12px/1.2 'DM Sans', sans-serif;
+    text-align: left;
+  }
+
+  .topbar .top-actions .pill {
+    display: none !important;
+  }
+
+  .topbar .top-actions > button {
+    box-sizing: border-box;
+    min-height: 38px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    font: 800 12px/1.2 'DM Sans', sans-serif;
+    white-space: nowrap;
+  }
+
+  .topbar .top-actions > button[hidden] {
+    display: none !important;
+  }
+}
+
+@media (min-width: 681px) {
+  #topCreate { display: none; }
+}
