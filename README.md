@@ -4,6 +4,9 @@
 
 Team Rocky Raccoon's project for **HackGlobal**.
 
+- **Live website:** [https://safetyquestlearning.com](https://safetyquestlearning.com)
+- **Source code:** [GitHub repository](https://github.com/sophiaBeker/HackGlobal-Rocky-Raccoon)
+
 ## About the Project
 
 Safety Quest is an interactive educational platform designed to teach children about emergency preparedness through engaging, age-appropriate lessons and activities. Initially targeting students in kindergarten through fifth grade (K–5), the platform helps young learners understand and remember essential safety procedures for emergencies such as earthquakes, fires, school drills, and shelter-in-place situations.
@@ -13,8 +16,6 @@ Emergency instructions can be confusing or intimidating for young children, maki
 Meet **Rocky Raccoon**, our friendly mascot and learning companion! Rocky guides students through lessons, answers questions, and encourages them as they learn, helping make emergency preparedness less intimidating and more engaging.
 
 ## Current Prototype Features
-
-Our prototype introduces several features designed to make emergency preparedness education interactive and accessible.
 
 ### Interactive Learning Modules
 
@@ -69,18 +70,104 @@ Safety Quest supports both guest learners and registered users.
 
 ## Technology Stack
 
-- **Frontend:** HTML, CSS, JavaScript
-- **Authentication and Data Storage:** Supabase
-- **AI Integration:** NRP-hosted LLMs through an OpenAI-compatible API
-- **Configuration:** Environment variables for API credentials and service connections
+| Area | Technology |
+|---|---|
+| Frontend | HTML, CSS, JavaScript |
+| Backend | Node.js and Express |
+| Authentication and data storage | Supabase |
+| AI integration | NRP-hosted LLMs through an OpenAI-compatible API |
+| Web security | Helmet, server-side validation and safety screening |
+| Deployment | Ubuntu server on Vultr, Nginx, PM2, Cloudflare DNS/proxy, Let's Encrypt HTTPS |
 
-Rocky's AI uses the NRP OpenAI-compatible endpoint (`https://ellm.nrp-nautilus.io/v1`) with the `gpt-oss` model by default. Set `NRP_API_KEY`, `NRP_BASE_URL`, and `NRP_MODEL` in your local `.env` file. The server performs lightweight local safety screening; this is not a replacement for dedicated moderation or a production child-safety review.
+Rocky's AI uses the NRP OpenAI-compatible endpoint (`https://ellm.nrp-nautilus.io/v1`) with the `gpt-oss` model by default. Configure `NRP_API_KEY`, `NRP_BASE_URL`, and `NRP_MODEL` in the server's `.env` file. The server performs lightweight local safety screening; this is not a replacement for dedicated moderation or a production child-safety review.
+
+## Getting Started
+
+For the complete local setup, Supabase configuration, environment-variable reference, and troubleshooting steps, see **[docs/SETUP.md](docs/SETUP.md)**.
+
+### Quick start
+
+**Requirements:** Node.js 22 or later and npm.
+
+```bash
+git clone https://github.com/sophiaBeker/HackGlobal-Rocky-Raccoon.git
+cd HackGlobal-Rocky-Raccoon
+npm install
+```
+
+Create your local environment file:
+
+```bash
+cp .env.example .env
+```
+
+Fill in the required values in `.env` (see [the setup guide](docs/SETUP.md)), then start the server:
+
+```bash
+npm start
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+For development with automatic server restarts:
+
+```bash
+npm run dev
+```
+
+## Project Structure
+
+```text
+.
+├── index.html              # Main single-page application
+├── config.js               # Public browser configuration (no private keys)
+├── css/                    # Stylesheets and responsive design
+├── js/                     # Frontend features and interactions
+├── server/
+│   ├── server.js            # Express app and API endpoints
+│   ├── account.js           # Account-related server routes
+│   ├── rocky-explain.js     # Lesson explanation endpoint
+│   └── lib/                 # Authentication, lessons, moderation, privacy, topics
+├── tests/                  # Node.js automated tests
+├── tools/                  # Project maintenance scripts
+├── docs/                   # Setup and architecture documentation
+├── supabase-schema.sql     # Supabase tables, indexes, and RLS policies
+├── .env.example            # Environment variable template
+├── package.json            # Dependencies and npm scripts
+└── README.md
+```
+
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for a concise explanation of how the frontend, server, AI service, and Supabase fit together.
+
+## Running Tests
+
+Run the automated test suite from the repository root:
+
+```bash
+npm test
+```
+
+The tests use Node.js's built-in test runner. They cover backend account behavior, lesson handling, and topic classification/guardrails. Tests do not replace manual testing of the deployed website or external Supabase/NRP integrations.
+
+## Deployment
+
+The public prototype is deployed at [https://safetyquestlearning.com](https://safetyquestlearning.com). The production setup uses a Vultr Ubuntu server running the Node.js application behind Nginx, with PM2 managing the Node process. Cloudflare manages DNS and proxying, and Let's Encrypt provides the origin TLS certificate.
+
+Deployment credentials and private environment variables are intentionally not stored in this repository. See [docs/SETUP.md](docs/SETUP.md) for local setup; production server administration is separate from the local development setup.
 
 ## Safety and Educational Responsibility
 
 Safety Quest is intended to supplement, not replace, guidance from teachers, parents, and emergency management professionals.
 
-Educational content should be grounded in reliable emergency preparedness resources. AI-generated responses are designed to support learning rather than independently determine emergency procedures.
+Educational content should be grounded in reliable emergency preparedness resources. AI-generated responses are designed to support learning rather than independently determine emergency procedures. Children should follow their teachers, caregivers, and local emergency officials during real emergencies. Emergency contact numbers and procedures vary by location and should be checked against official local sources.
+
+## Security and Privacy Notes
+
+- Never commit a real `.env` file, API token, password, or private key.
+- Keep `NRP_API_KEY` and `SUPABASE_SERVICE_ROLE_KEY` on the server only.
+- The Supabase anonymous/publishable key in `config.js` is intended for browser use; database access must be protected by the Row Level Security policies in `supabase-schema.sql`.
+- Do not put private credentials in frontend JavaScript or HTML.
+- The project includes privacy and safety screening, but it is a hackathon prototype and has not undergone a formal security, privacy, accessibility, or child-safety certification review.
 
 ## Future Development
 
@@ -96,19 +183,6 @@ Potential future developments include:
 - Additional interactive scenarios, rewards, and progression systems.
 
 Emergency preparedness is an important life skill at every age. By making safety education more approachable and accessible, Safety Quest aims to help more people build the knowledge and confidence they need to respond appropriately during emergencies.
-
-## Getting Started
-
-To run the project locally:
-
-1. Clone the repository.
-2. Navigate to the project directory.
-3. Review the `.env.example` file for required environment variables.
-4. Configure the necessary Supabase credentials and an NRP LLM API token (`NRP_API_KEY`).
-5. Install dependencies from the repository root with `npm install`.
-6. Start the application with `npm start` (or use `npm run dev` during development).
-
-**Note:** Some features, including authentication, saved progress, and AI-powered conversations, require appropriate service configuration. Guest learning functionality provides an alternative way to explore the prototype.
 
 ## Team Rocky Raccoon
 
