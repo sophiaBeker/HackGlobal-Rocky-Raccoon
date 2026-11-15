@@ -40,3 +40,27 @@ body.large-text p,body.large-text label,body.large-text button,body.large-text i
 body.reduce-motion *,body.reduce-motion *::before,body.reduce-motion *::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 @media(max-width:760px){.daily-options{grid-template-columns:1fr}.achievement-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.learning-hub{padding:16px}.daily-option{min-height:54px}}
 @media(prefers-reduced-motion:reduce){.journey-track span{transition:none}}
+
+
+/* Keep the two accessibility controls aligned on mobile. */
+@media (max-width: 680px) {
+  .accessibility-tools {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 9px;
+  }
+
+  .accessibility-tools strong {
+    grid-column: 1 / -1;
+    margin-right: 0;
+  }
+
+  .accessibility-tools button {
+    width: 100%;
+    min-width: 0;
+    padding: 9px 8px;
+    white-space: nowrap;
+    font-size: 13px;
+  }
+}
