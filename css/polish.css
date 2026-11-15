@@ -194,3 +194,23 @@ body.large-text .callout,body.large-text .notice{font-size:17px}
     overflow-wrap: anywhere;
   }
 }
+
+/* ---------- Simplify the mobile dashboard header ---------- */
+@media (max-width: 680px) {
+  /* Keep the page context, but remove secondary controls from the first screen.
+     Points are shown in the progress section; account access lives in More. */
+  .topbar {
+    display: block;
+    margin: 0 0 14px;
+  }
+
+  .topbar .crumb {
+    font-size: 13px;
+    line-height: 1.35;
+    color: var(--muted);
+  }
+
+  .topbar .top-actions {
+    display: none !important;
+  }
+}
