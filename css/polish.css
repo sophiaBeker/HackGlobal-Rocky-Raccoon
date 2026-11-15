@@ -151,3 +151,46 @@ body.large-text .callout,body.large-text .notice{font-size:17px}
     min-width: 0;
   }
 }
+
+/* ---------- Mobile topbar layout ---------- */
+@media (max-width: 680px) {
+  .topbar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .crumb {
+    font-size: 14px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  .top-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .top-actions > * {
+    min-width: 0;
+    max-width: 100%;
+    justify-content: center;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .top-actions .pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 9px 10px;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+}
