@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 /*
- * One-off edits to existing Safety Quest files. Run from the repo root:
- *   node tools/apply-content-fixes.js
+ * One-off content edits to existing Safety Quest files. Run from the repo root:
+ *   node js/apply-content-fixes.js
  * Safe to run twice: every edit checks whether it was already applied.
  *
- *  1. scripted-lessons.js: the kit lesson no longer says "Call 911" (numbers differ by country)
- *  2. scripted-lessons.js: adds a `sources` list to the flood, kit and blackout lessons
- *  3. lesson-experience.js: quiz points are awarded only on a lesson's first completion
+ *  1. scripted-lessons.js: use the local emergency number instead of assuming 911
+ *  2. scripted-lessons.js: add source lists to the flood, kit and blackout lessons
+ *
+ * Quiz reward logic is intentionally not modified by this script; it is maintained
+ * in js/lesson-experience.js and must stay aligned with Supabase progress tracking.
  *
  * Please open the source links once to confirm they still work before public use.
  */
@@ -67,14 +69,6 @@ function addSources(src, id) {
 
 edit("js/scripted-lessons.js", "sources for flood, kit and blackout", src =>
   Object.keys(SOURCES).reduce(addSources, src)
-);
-
-// 3. no point farming on quiz retries
-edit("js/lesson-experience.js", "quiz points only on first completion", src =>
-  /if \(!progress\.completed\.includes\(activeLesson\)\) \{\s*progress\.points = /.test(src) ? src : src.replace(
-    /progress\.points = \(progress\.points \|\| 0\) \+ 5;\s*pointsEarnedThisRun \+= 5;/,
-    "if (!progress.completed.includes(activeLesson)) {\n                progress.points = (progress.points || 0) + 5;\n                pointsEarnedThisRun += 5;\n              }"
-  )
 );
 
 console.log(results.join("\n"));
