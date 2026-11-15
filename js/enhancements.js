@@ -8,30 +8,9 @@
 (() => {
     "use strict";
   
-    const topActions = document.querySelector(".top-actions");
-  
-    if (!topActions || document.getElementById("textSizeToggle")) {
-      return;
-    }
-  
-    const toggle = document.createElement("button");
-  
-    toggle.id = "textSizeToggle";
-    toggle.className = "secondary";
-    toggle.type = "button";
-    toggle.textContent = "A+ Text";
-    toggle.setAttribute("aria-pressed", "false");
-    toggle.setAttribute("aria-label", "Toggle larger text");
-  
-    toggle.addEventListener("click", () => {
-      const enabled = document.body.classList.toggle("large-text");
-  
-      toggle.textContent = enabled ? "A− Text" : "A+ Text";
-      toggle.setAttribute("aria-pressed", String(enabled));
-    });
-  
-    topActions.prepend(toggle);
-  
+    // The larger-text control now lives in the home page Accessibility Tools
+    // section (largeTextToggle). Do not inject a duplicate into the top bar.
+
     const style = document.createElement("style");
   
     style.textContent = `
