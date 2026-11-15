@@ -148,7 +148,7 @@
         previousAnswerOrders.set(key, order.slice());
         previousCorrectPositions.set(key, order.indexOf(question.correct));
 
-                const shuffledWrongWhy = {};
+        const shuffledWrongWhy = {};
         order.forEach((originalIndex, shuffledIndex) => {
           if (question.wrongWhy && question.wrongWhy[originalIndex]) {
             shuffledWrongWhy[shuffledIndex] = question.wrongWhy[originalIndex];
@@ -407,7 +407,10 @@
             if (!rewardedQuestions.includes(rewardKey)) {
               rewardedQuestions.push(rewardKey);
               progress.quizQuestionRewards[activeLesson] = rewardedQuestions;
+              progress.points = (progress.points || 0) + 5;
               pointsEarnedThisRun += 5;
+              // Save each newly mastered question immediately, even if the learner exits early.
+              if (typeof persist === "function") persist();
             }
           } else {
             wrongAttempts++;
@@ -460,11 +463,13 @@
         const alreadyCompleted = progress.completed.includes(activeLesson);
         if (!alreadyCompleted) {
           progress.completed.push(activeLesson);
-          // The lesson completion bonus is awarded only once.
-          pointsEarnedThisRun += 20;
+          // First four modules award 25 completion points; the final two award 20.
+          // Together with five 5-point questions, the full curriculum totals 290 points.
+          const completionBonus = ["kit", "help"].includes(activeLesson) ? 20 : 25;
+          progress.points = (progress.points || 0) + completionBonus;
+          pointsEarnedThisRun += completionBonus;
         }
-        // Newly mastered questions can still earn their one-time reward on later retakes.
-        progress.points = (progress.points || 0) + pointsEarnedThisRun;
+        // Question rewards were already credited when each question was mastered.
         completedThisRun = true;
       }
       
