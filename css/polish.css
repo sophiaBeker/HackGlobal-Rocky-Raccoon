@@ -291,3 +291,9 @@ body.large-text .callout,body.large-text .notice{font-size:17px}
 .top-actions > button[hidden] {
   display: none !important;
 }
+
+
+/* Authenticated users should never see the account creation action. */
+body.is-authenticated #topCreate {
+  display: none !important;
+}
