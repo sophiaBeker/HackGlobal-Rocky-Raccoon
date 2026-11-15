@@ -293,7 +293,7 @@
           },
           {
             title: "What should you do if someone gets hurt?",
-            body: "Stay calm and make sure you are in a safe place. Tell a teacher or trusted adult. Call 911 if there is a serious emergency and an adult is not already getting help. Follow the emergency helper's instructions.",
+            body: "Stay calm and make sure you are in a safe place. Tell a teacher or trusted adult. Call your local emergency number if there is a serious emergency and an adult is not already getting help. Follow the emergency helper's instructions.",
             callout: "Helping doesn't always mean touching someone's injury. Sometimes the best way to help is to get an adult!",
             q: "What is a safe way to help someone who is hurt?",
             answers: [
