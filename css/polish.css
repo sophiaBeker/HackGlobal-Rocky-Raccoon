@@ -110,3 +110,44 @@ body.large-text .callout,body.large-text .notice{font-size:17px}
   .more-sheet button.active{background:var(--green2);color:var(--green)}
   .sq-toast{bottom:96px}
 }
+
+/* ---------- Mobile layout corrections ---------- */
+@media (max-width: 680px) {
+  /* The desktop sidebar is viewport-height; reset it for the compact mobile header. */
+  aside {
+    position: relative;
+    top: auto;
+    height: auto;
+    min-height: 0;
+    width: 100%;
+    overflow: visible;
+    align-self: stretch;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px 14px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    padding: 0;
+  }
+
+  .app {
+    display: block;
+    min-height: 100vh;
+  }
+
+  main {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 18px 14px 110px;
+  }
+
+  .page {
+    width: 100%;
+    min-width: 0;
+  }
+}
